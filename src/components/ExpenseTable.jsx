@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
-  const [editIndex, setEditIndex] = useState(null);
+  const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({});
 
   const fixedExpenses = expenses.filter(exp => exp.type === 'fixed');
@@ -37,19 +37,19 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
     };
   };
 
-  const startEdit = (exp) => {
-    const globalIndex = expenses.indexOf(exp);
-    setEditIndex(globalIndex);
+  const startEdit = (id) => {
+    const exp = expenses.find(e => e._id === id);
+    setEditId(id);
     setEditData({ ...exp });
   };
 
   const saveEdit = () => {
-    onEditExpense(editIndex, editData);
-    setEditIndex(null);
+    onEditExpense(editId, editData);
+    setEditId(null);
   };
 
   const cancelEdit = () => {
-    setEditIndex(null);
+    setEditId(null);
   };
 
   const renderTable = (title, expList) => (
@@ -67,10 +67,9 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
         </thead>
         <tbody>
           {expList.map((exp) => {
-            const globalIndex = expenses.indexOf(exp);
             return (
-              <tr key={globalIndex}>
-                {editIndex === globalIndex ? (
+              <tr key={exp._id}>
+                {editId === exp._id ? (
                   <>
                     <td><input value={editData.description} onChange={(e) => setEditData({ ...editData, description: e.target.value })} /></td>
                     <td><input type="number" value={editData.amount} onChange={(e) => setEditData({ ...editData, amount: parseFloat(e.target.value) })} /></td>
@@ -88,8 +87,8 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
                     <td>{exp.date}</td>
                     <td>{exp.isRecurring ? 'Oui' : 'Non'}</td>
                     <td>
-                      <button onClick={() => startEdit(exp)}>Modifier</button>
-                      <button onClick={() => onDeleteExpense(exp)}>Supprimer</button>
+                      <button onClick={() => startEdit(exp._id)}>Modifier</button>
+                      <button onClick={() => onDeleteExpense(exp._id)}>Supprimer</button>
                     </td>
                   </>
                 )}

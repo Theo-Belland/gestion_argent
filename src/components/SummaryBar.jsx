@@ -6,6 +6,8 @@ function SummaryBar({ incomes, expenses }) {
   const savings = totalIncome - totalExpenses;
   const remainingToLive = totalIncome - totalFixed;
 
+  console.log('SummaryBar calculations:', { totalIncome, totalFixed, totalVariable, totalExpenses, savings, remainingToLive });
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount);
   };
@@ -36,7 +38,7 @@ function SummaryBar({ incomes, expenses }) {
         <p style={{ fontSize: '1.5em', fontWeight: 'bold', margin: '5px 0' }}>{formatCurrency(totalVariable)}</p>
       </div>
       <div style={{ textAlign: 'center', flex: '1', minWidth: '150px' }}>
-        <h3 style={{ margin: '0', fontSize: '1.2em' }}>💸 Épargne</h3>
+        <h3 style={{ margin: '0', fontSize: '1.2em' }}>💸 Solde Restant</h3>
         <p style={{
           fontSize: '1.5em',
           fontWeight: 'bold',

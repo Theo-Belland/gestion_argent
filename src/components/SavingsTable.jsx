@@ -38,7 +38,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
   };
 
   const handleEdit = (savings) => {
-    setEditingId(savings.id);
+    setEditingId(savings._id);
     setEditData({ ...savings });
   };
 
@@ -51,7 +51,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
   const handleAddAmount = (savingsId) => {
     const amount = parseFloat(addAmount[savingsId]) || 0;
     if (amount > 0) {
-      const savingsItem = savings.find(s => s.id === savingsId);
+      const savingsItem = savings.find(s => s._id === savingsId);
       const newAmount = savingsItem.amount + amount;
       onAddToSavings(savingsId, newAmount);
       setAddAmount({ ...addAmount, [savingsId]: '' });
@@ -61,7 +61,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
   const handleWithdrawAmount = (savingsId) => {
     const amount = parseFloat(withdrawAmount[savingsId]) || 0;
     if (amount > 0) {
-      const savingsItem = savings.find(s => s.id === savingsId);
+      const savingsItem = savings.find(s => s._id === savingsId);
       const newAmount = Math.max(0, savingsItem.amount - amount);
       onWithdrawSavings(savingsId, newAmount);
       setWithdrawAmount({ ...withdrawAmount, [savingsId]: '' });
@@ -112,11 +112,11 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
         <tbody>
           {savings.map((savingsItem) => {
             const { interest, total, days } = calculateInterest(savingsItem);
-            const isEditing = editingId === savingsItem.id;
+            const isEditing = editingId === savingsItem._id;
 
             if (isEditing) {
               return (
-                <tr key={savingsItem.id} style={{ backgroundColor: '#fff3cd', borderBottom: '1px solid #ddd' }}>
+                <tr key={savingsItem._id} style={{ backgroundColor: '#fff3cd', borderBottom: '1px solid #ddd' }}>
                   <td style={{ padding: '10px' }}>
                     <input
                       type="text"
@@ -163,7 +163,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                   </td>
                   <td colSpan="2" style={{ padding: '10px', textAlign: 'center' }}>
                     <button
-                      onClick={() => handleSaveEdit(savingsItem.id)}
+                      onClick={() => handleSaveEdit(savingsItem._id)}
                       style={{
                         padding: '5px 10px',
                         backgroundColor: '#28a745',
@@ -195,7 +195,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
             }
 
             return (
-              <tr key={savingsItem.id} style={{ borderBottom: '1px solid #ddd' }}>
+              <tr key={savingsItem._id} style={{ borderBottom: '1px solid #ddd' }}>
                 <td style={{ padding: '10px' }}>{savingsItem.name}</td>
                 <td style={{ padding: '10px', textAlign: 'right' }}>{savingsItem.amount.toFixed(2)} €</td>
                 <td style={{ padding: '10px', textAlign: 'right' }}>{savingsItem.interestRate.toFixed(2)}%</td>
@@ -207,11 +207,11 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                 </td>
                 <td 
                   style={{ padding: '10px', textAlign: 'right', color: '#28a745', fontWeight: 'bold', cursor: 'pointer', position: 'relative' }}
-                  onMouseEnter={() => setShowDetails(savingsItem.id)}
+                  onMouseEnter={() => setShowDetails(savingsItem._id)}
                   onMouseLeave={() => setShowDetails(null)}
                 >
                   +{interest.toFixed(2)} €
-                  {showDetails === savingsItem.id && (
+                  {showDetails === savingsItem._id && (
                     <div style={{
                       position: 'absolute',
                       bottom: '100%',
@@ -250,7 +250,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                     Modifier
                   </button>
                   <button
-                    onClick={() => onDeleteSavings(savingsItem.id)}
+                    onClick={() => onDeleteSavings(savingsItem._id)}
                     style={{
                       padding: '5px 8px',
                       backgroundColor: '#dc3545',
@@ -277,9 +277,9 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
       }}>
         <h3>Ajouter ou Retirer des Montants</h3>
         {savings.map((savingsItem) => (
-          <div key={savingsItem.id} style={{ marginBottom: '10px' }}>
+          <div key={savingsItem._id} style={{ marginBottom: '10px' }}>
             <button
-              onClick={() => setModalOpen(modalOpen === savingsItem.id ? null : savingsItem.id)}
+              onClick={() => setModalOpen(modalOpen === savingsItem._id ? null : savingsItem._id)}
               style={{
                 width: '100%',
                 padding: '10px',
@@ -292,10 +292,10 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                 fontWeight: 'bold'
               }}
             >
-              {savingsItem.name} {modalOpen === savingsItem.id ? '▲' : '▼'}
+              {savingsItem.name} {modalOpen === savingsItem._id ? '▲' : '▼'}
             </button>
 
-            {modalOpen === savingsItem.id && (
+            {modalOpen === savingsItem._id && (
               <div style={{
                 backgroundColor: 'white',
                 border: '1px solid #ddd',
@@ -312,8 +312,8 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                     <input
                       type="number"
                       placeholder="Montant à ajouter"
-                      value={addAmount[savingsItem.id] || ''}
-                      onChange={(e) => setAddAmount({ ...addAmount, [savingsItem.id]: e.target.value })}
+                      value={addAmount[savingsItem._id] || ''}
+                      onChange={(e) => setAddAmount({ ...addAmount, [savingsItem._id]: e.target.value })}
                       step="0.01"
                       min="0"
                       style={{
@@ -324,7 +324,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                       }}
                     />
                     <button
-                      onClick={() => handleAddAmount(savingsItem.id)}
+                      onClick={() => handleAddAmount(savingsItem._id)}
                       style={{
                         padding: '8px 15px',
                         backgroundColor: '#28a745',
@@ -348,8 +348,8 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                     <input
                       type="number"
                       placeholder="Montant à retirer"
-                      value={withdrawAmount[savingsItem.id] || ''}
-                      onChange={(e) => setWithdrawAmount({ ...withdrawAmount, [savingsItem.id]: e.target.value })}
+                      value={withdrawAmount[savingsItem._id] || ''}
+                      onChange={(e) => setWithdrawAmount({ ...withdrawAmount, [savingsItem._id]: e.target.value })}
                       step="0.01"
                       min="0"
                       style={{
@@ -360,7 +360,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                       }}
                     />
                     <button
-                      onClick={() => handleWithdrawAmount(savingsItem.id)}
+                      onClick={() => handleWithdrawAmount(savingsItem._id)}
                       style={{
                         padding: '8px 15px',
                         backgroundColor: '#dc3545',

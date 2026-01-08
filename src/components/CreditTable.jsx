@@ -48,7 +48,7 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
   };
 
   const handleEdit = (credit) => {
-    setEditingId(credit.id);
+    setEditingId(credit._id);
     setEditData({ ...credit });
   };
 
@@ -109,11 +109,11 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
         <tbody>
           {credits.map((credit) => {
             const details = calculateCreditDetails(credit);
-            const isEditing = editingId === credit.id;
+            const isEditing = editingId === credit._id;
 
             if (isEditing) {
               return (
-                <tr key={credit.id} style={{ backgroundColor: '#fff5f5', borderBottom: '1px solid #ddd' }}>
+                <tr key={credit._id} style={{ backgroundColor: '#fff5f5', borderBottom: '1px solid #ddd' }}>
                   <td style={{ padding: '10px' }}>
                     <input
                       type="text"
@@ -150,7 +150,7 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
                   </td>
                   <td colSpan="2" style={{ padding: '10px', textAlign: 'center' }}>
                     <button
-                      onClick={() => handleSaveEdit(credit.id)}
+                      onClick={() => handleSaveEdit(credit._id)}
                       style={{
                         padding: '5px 10px',
                         backgroundColor: '#28a745',
@@ -182,7 +182,7 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
             }
 
             return (
-              <tr key={credit.id} style={{ borderBottom: '1px solid #ddd' }}>
+              <tr key={credit._id} style={{ borderBottom: '1px solid #ddd' }}>
                 <td style={{ padding: '10px' }}>{credit.name}</td>
                 <td style={{ padding: '10px', textAlign: 'right' }}>{credit.amount.toFixed(2)} €</td>
                 <td style={{ padding: '10px', textAlign: 'right' }}>{credit.interestRate.toFixed(2)}%</td>
@@ -196,8 +196,8 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
                       <input
                         type="number"
                         placeholder="Nouveau montant"
-                        value={updateBalance[credit.id] || ''}
-                        onChange={(e) => setUpdateBalance({ ...updateBalance, [credit.id]: e.target.value })}
+                        value={updateBalance[credit._id] || ''}
+                        onChange={(e) => setUpdateBalance({ ...updateBalance, [credit._id]: e.target.value })}
                         step="0.01"
                         min="0"
                         style={{
@@ -209,7 +209,7 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
                         }}
                       />
                       <button
-                        onClick={() => handleUpdateBalance(credit.id)}
+                        onClick={() => handleUpdateBalance(credit._id)}
                         style={{
                           padding: '3px 6px',
                           backgroundColor: '#28a745',
@@ -244,7 +244,7 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
                     Modifier
                   </button>
                   <button
-                    onClick={() => onDeleteCredit(credit.id)}
+                    onClick={() => onDeleteCredit(credit._id)}
                     style={{
                       padding: '5px 8px',
                       backgroundColor: '#dc3545',
@@ -277,9 +277,9 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
         {credits.map((credit) => {
           const details = calculateCreditDetails(credit);
           return (
-            <div key={credit.id} style={{ marginBottom: '10px' }}>
+            <div key={credit._id} style={{ marginBottom: '10px' }}>
               <button
-                onClick={() => setShowDetails(showDetails === credit.id ? null : credit.id)}
+                onClick={() => setShowDetails(showDetails === credit._id ? null : credit._id)}
                 style={{
                   width: '100%',
                   padding: '10px',
@@ -292,10 +292,10 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
                   fontWeight: 'bold'
                 }}
               >
-                {credit.name} {showDetails === credit.id ? '▲' : '▼'}
+                {credit.name} {showDetails === credit._id ? '▲' : '▼'}
               </button>
 
-              {showDetails === credit.id && (
+              {showDetails === credit._id && (
                 <div style={{
                   backgroundColor: 'white',
                   border: '1px solid #ddd',

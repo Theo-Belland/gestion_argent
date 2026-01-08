@@ -1,21 +1,22 @@
 import { useState } from 'react';
 
 function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
-  const [editIndex, setEditIndex] = useState(null);
+  const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({});
 
-  const startEdit = (index) => {
-    setEditIndex(index);
-    setEditData({ ...incomes[index] });
+  const startEdit = (id) => {
+    const income = incomes.find(inc => inc._id === id);
+    setEditId(id);
+    setEditData({ ...income });
   };
 
   const saveEdit = () => {
-    onEditIncome(editIndex, editData);
-    setEditIndex(null);
+    onEditIncome(editId, editData);
+    setEditId(null);
   };
 
   const cancelEdit = () => {
-    setEditIndex(null);
+    setEditId(null);
   };
 
   return (
@@ -32,9 +33,9 @@ function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
           </tr>
         </thead>
         <tbody>
-          {incomes.map((inc, index) => (
-            <tr key={index}>
-              {editIndex === index ? (
+          {incomes.map((inc) => (
+            <tr key={inc._id}>
+              {editId === inc._id ? (
                 <>
                   <td><input value={editData.description} onChange={(e) => setEditData({ ...editData, description: e.target.value })} /></td>
                   <td><input type="number" value={editData.amount} onChange={(e) => setEditData({ ...editData, amount: parseFloat(e.target.value) })} /></td>
@@ -52,8 +53,8 @@ function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
                   <td>{inc.date}</td>
                   <td>{inc.isRecurring ? 'Oui' : 'Non'}</td>
                   <td>
-                    <button onClick={() => startEdit(index)}>Modifier</button>
-                    <button onClick={() => onDeleteIncome(inc)}>Supprimer</button>
+                    <button onClick={() => startEdit(inc._id)}>Modifier</button>
+                    <button onClick={() => onDeleteIncome(inc._id)}>Supprimer</button>
                   </td>
                 </>
               )}
