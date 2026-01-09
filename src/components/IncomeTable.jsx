@@ -50,7 +50,7 @@ function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
                 <>
                   <td>{inc.description}</td>
                   <td>{inc.amount} €</td>
-                  <td>{inc.date}</td>
+                  <td>{new Date(inc.date).toLocaleDateString('fr-FR')}</td>
                   <td>{inc.isRecurring ? 'Oui' : 'Non'}</td>
                   <td>
                     <button onClick={() => startEdit(inc._id)}>Modifier</button>

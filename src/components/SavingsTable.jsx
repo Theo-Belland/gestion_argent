@@ -203,7 +203,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                   {savingsItem.frequency === 'monthly' ? 'Mensuel' : 'Annuel'}
                 </td>
                 <td style={{ padding: '10px', textAlign: 'center', fontSize: '0.9em' }}>
-                  {savingsItem.startDate}
+                  {new Date(savingsItem.startDate).toLocaleDateString('fr-FR')}
                 </td>
                 <td 
                   style={{ padding: '10px', textAlign: 'right', color: '#28a745', fontWeight: 'bold', cursor: 'pointer', position: 'relative' }}
@@ -227,7 +227,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                       marginBottom: '5px',
                       boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
                     }}>
-                      {Math.floor(days)} jours • {savingsItem.startDate}
+                      {Math.floor(days)} jours • {new Date(savingsItem.startDate).toLocaleDateString('fr-FR')}
                     </div>
                   )}
                 </td>

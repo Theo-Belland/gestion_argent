@@ -16,8 +16,8 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
 
     // Utiliser le montant restant actuel si disponible, sinon calculer théoriquement
     let remainingAmount;
-    if (credit.currentBalance !== undefined && credit.currentBalance !== null) {
-      remainingAmount = credit.currentBalance;
+    if (credit.balance !== undefined && credit.balance !== null) {
+      remainingAmount = credit.balance;
     } else {
       // Calcul théorique si pas de montant actuel
       const monthlyRate = credit.interestRate / 100 / 12;
@@ -26,13 +26,24 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
       remainingAmount = monthlyPayment * monthsRemaining;
     }
 
+    // Estimation de la mensualité (si pas connue)
+    const interestRate = parseFloat(credit.interestRate) || 0;
+    const durationMonths = parseInt(credit.durationMonths) || 0;
+    const monthlyRate = interestRate / 100 / 12;
+    const estimatedMonthlyPayment = isNaN(monthlyRate) || monthlyRate === 0 || durationMonths === 0 ? 0 :
+                                   credit.amount * (monthlyRate * Math.pow(1 + monthlyRate, durationMonths)) /
+                                   (Math.pow(1 + monthlyRate, durationMonths) - 1);
+
     // Part par personne (divisé par 2)
+    const perPersonMonthly = estimatedMonthlyPayment / 2;
     const perPersonRemaining = remainingAmount / 2;
 
     return {
       monthsElapsed,
       monthsRemaining,
+      monthlyPayment: estimatedMonthlyPayment,
       remainingAmount,
+      perPersonMonthly,
       perPersonRemaining
     };
   };
@@ -66,9 +77,22 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
           </tr>
         </thead>
         <tbody>
-          {expList.map((exp) => {
+          {expList.map((exp, index) => {
+            let displayAmount = `${exp.amount} €`;
+            let displayDate = exp.date;
+
+            if (exp.category === 'Crédit' && exp.description.startsWith('Mensualité ')) {
+              const creditName = exp.description.replace('Mensualité ', '');
+              const credit = credits.find(c => c.name === creditName);
+              if (credit) {
+                const details = calculateCreditDetails(credit);
+                displayAmount = `${details.perPersonMonthly.toFixed(2)} €`;
+                displayDate = new Date(credit.startDate).toLocaleDateString('fr-FR'); // Date de prélèvement
+              }
+            }
+
             return (
-              <tr key={exp._id}>
+              <tr key={exp._id || index}>
                 {editId === exp._id ? (
                   <>
                     <td><input value={editData.description} onChange={(e) => setEditData({ ...editData, description: e.target.value })} /></td>
@@ -83,8 +107,8 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
                 ) : (
                   <>
                     <td>{exp.description}</td>
-                    <td>{exp.amount} €</td>
-                    <td>{exp.date}</td>
+                    <td>{displayAmount}</td>
+                    <td>{new Date(displayDate).toLocaleDateString('fr-FR')}</td>
                     <td>{exp.isRecurring ? 'Oui' : 'Non'}</td>
                     <td>
                       <button onClick={() => startEdit(exp._id)}>Modifier</button>
@@ -107,40 +131,40 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
   const renderCreditTable = () => {
     if (!credits || credits.length === 0) return null;
 
-    const totalCreditParts = credits.reduce((sum, credit) => {
+    const totalCreditMonthly = credits.reduce((sum, credit) => {
       const details = calculateCreditDetails(credit);
-      return sum + details.perPersonRemaining;
+      return sum + details.perPersonMonthly;
     }, 0);
 
     return (
       <div>
-        <h3>Dépenses Fixes - Crédits (Parts par personne)</h3>
+        <h3>Dépenses Fixes - Crédits (Mensualités)</h3>
         <table>
           <thead>
             <tr>
               <th>Description</th>
-              <th>Montant Restant</th>
+              <th>Mensualité Totale</th>
               <th>Part par Personne</th>
               <th>Mois Restants</th>
-              <th>Date</th>
+              <th>Date de Prélèvement</th>
             </tr>
           </thead>
           <tbody>
-            {credits.map((credit) => {
+            {credits.map((credit, index) => {
               const details = calculateCreditDetails(credit);
               return (
-                <tr key={credit.id}>
+                <tr key={credit._id || index}>
                   <td>{credit.name}</td>
-                  <td>{details.remainingAmount.toFixed(2)} €</td>
-                  <td style={{ fontWeight: 'bold', color: '#dc3545' }}>{details.perPersonRemaining.toFixed(2)} €</td>
+                  <td>{details.monthlyPayment.toFixed(2)} €</td>
+                  <td style={{ fontWeight: 'bold', color: '#dc3545' }}>{details.perPersonMonthly.toFixed(2)} €</td>
                   <td>{details.monthsRemaining}</td>
-                  <td>{credit.startDate}</td>
+                  <td>{new Date(credit.startDate).toLocaleDateString('fr-FR')}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
-        <p><strong>Total Crédits (parts par personne) :</strong> {totalCreditParts.toFixed(2)} €</p>
+        <p><strong>Total Mensualités Crédits (parts par personne) :</strong> {totalCreditMonthly.toFixed(2)} €</p>
       </div>
     );
   };
@@ -150,7 +174,7 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
       {renderCreditTable()}
       {categories.map(cat => {
         const catExpenses = fixedExpenses.filter(exp => exp.category === cat);
-        return catExpenses.length > 0 ? renderTable(`Dépenses Fixes - ${cat}`, catExpenses) : null;
+        return catExpenses.length > 0 ? <div key={cat}>{renderTable(`Dépenses Fixes - ${cat}`, catExpenses)}</div> : null;
       })}
       {renderTable('Dépenses Variables', variableExpenses)}
     </div>

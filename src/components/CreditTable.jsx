@@ -14,8 +14,8 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
 
     // Utiliser le montant restant actuel si disponible, sinon calculer théoriquement
     let remainingAmount;
-    if (credit.currentBalance !== undefined && credit.currentBalance !== null) {
-      remainingAmount = credit.currentBalance;
+    if (credit.balance !== undefined && credit.balance !== null) {
+      remainingAmount = credit.balance;
     } else {
       // Calcul théorique si pas de montant actuel
       const monthlyRate = credit.interestRate / 100 / 12;

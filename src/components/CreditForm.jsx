@@ -17,14 +17,12 @@ function CreditForm({ onAddCredit }) {
     }
 
     const newCredit = {
-      id: Date.now(),
       name,
       amount: parseFloat(amount),
       interestRate: parseFloat(interestRate),
       durationMonths: parseInt(durationMonths),
       startDate: startDate,
-      currentBalance: currentBalance ? parseFloat(currentBalance) : parseFloat(amount),
-      lastUpdate: new Date().toISOString().split('T')[0],
+      balance: currentBalance ? parseFloat(currentBalance) : parseFloat(amount),
     };
 
     onAddCredit(newCredit);
