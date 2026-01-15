@@ -1,3 +1,5 @@
+⚠️ Etant en fin de formation d'integrateur web chez Openclassroom j'ai voulu m'initier a Copilot voir jusqu'a ou on pouvait aller avec dou le fait qu'une grande partie du Back-End a etait fait par lui le design sera refait par moi soin⚠️
+
 # Gestion de l'Argent
 
 Une application React multi-utilisateur pour gérer vos revenus et dépenses mensuels et annuels avec backend Node.js et MongoDB.
