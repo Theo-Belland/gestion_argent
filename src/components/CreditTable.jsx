@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../styles/CreditTable.scss';
 
 function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBalance }) {
   const [editingId, setEditingId] = useState(null);
@@ -68,42 +69,26 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
 
   if (credits.length === 0) {
     return (
-      <div style={{
-        backgroundColor: '#f9f9f9',
-        padding: '20px',
-        borderRadius: '8px',
-        flex: '1',
-        minWidth: '300px'
-      }}>
+      <div className="credit-table-container">
         <h2>Mes Crédits</h2>
-        <p style={{ color: '#666' }}>Aucun crédit enregistré.</p>
+        <p className="credit-no-data">Aucun crédit enregistré.</p>
       </div>
     );
   }
 
   return (
-    <div style={{
-      backgroundColor: '#f9f9f9',
-      padding: '20px',
-      borderRadius: '8px',
-      flex: '1',
-      minWidth: '300px'
-    }}>
+    <div className="credit-table-container">
       <h2>Mes Crédits</h2>
-      <table style={{
-        width: '100%',
-        borderCollapse: 'collapse',
-        marginBottom: '20px'
-      }}>
+      <table className="credit-table">
         <thead>
-          <tr style={{ backgroundColor: '#ffe6e6', borderBottom: '2px solid #dc3545' }}>
-            <th style={{ padding: '10px', textAlign: 'left' }}>Nom</th>
-            <th style={{ padding: '10px', textAlign: 'right' }}>Montant Initial</th>
-            <th style={{ padding: '10px', textAlign: 'right' }}>Taux (%)</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Mois Restants</th>
-            <th style={{ padding: '10px', textAlign: 'right' }}>Montant Restant Actuel</th>
-            <th style={{ padding: '10px', textAlign: 'right' }}>Part/Personne</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Actions</th>
+          <tr>
+            <th>Nom</th>
+            <th>Montant Initial</th>
+            <th>Taux (%)</th>
+            <th>Mois Restants</th>
+            <th>Montant Restant Actuel</th>
+            <th>Part/Personne</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -113,66 +98,51 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
 
             if (isEditing) {
               return (
-                <tr key={credit._id} style={{ backgroundColor: '#fff5f5', borderBottom: '1px solid #ddd' }}>
-                  <td style={{ padding: '10px' }}>
+                <tr key={credit._id}>
+                  <td>
                     <input
                       type="text"
                       value={editData.name}
                       onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                      style={{ width: '100%', padding: '5px' }}
+                      className="credit-modal-input"
                     />
                   </td>
-                  <td style={{ padding: '10px', textAlign: 'right' }}>
+                  <td>
                     <input
                       type="number"
                       value={editData.amount}
                       onChange={(e) => setEditData({ ...editData, amount: parseFloat(e.target.value) })}
-                      style={{ width: '100%', padding: '5px' }}
+                      className="credit-modal-input"
                       step="0.01"
                     />
                   </td>
-                  <td style={{ padding: '10px', textAlign: 'right' }}>
+                  <td>
                     <input
                       type="number"
                       value={editData.interestRate}
                       onChange={(e) => setEditData({ ...editData, interestRate: parseFloat(e.target.value) })}
-                      style={{ width: '100%', padding: '5px' }}
+                      className="credit-modal-input"
                       step="0.01"
                     />
                   </td>
-                  <td style={{ padding: '10px', textAlign: 'center' }}>
+                  <td>
                     <input
                       type="number"
                       value={editData.durationMonths}
                       onChange={(e) => setEditData({ ...editData, durationMonths: parseInt(e.target.value) })}
-                      style={{ width: '100%', padding: '5px' }}
+                      className="credit-modal-input"
                     />
                   </td>
-                  <td colSpan="2" style={{ padding: '10px', textAlign: 'center' }}>
+                  <td colSpan="2">
                     <button
                       onClick={() => handleSaveEdit(credit._id)}
-                      style={{
-                        padding: '5px 10px',
-                        backgroundColor: '#28a745',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        marginRight: '5px'
-                      }}
+                      className="credit-update-btn"
                     >
                       Valider
                     </button>
                     <button
                       onClick={() => setEditingId(null)}
-                      style={{
-                        padding: '5px 10px',
-                        backgroundColor: '#6c757d',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                      }}
+                      className="credit-delete-btn"
                     >
                       Annuler
                     </button>
@@ -182,17 +152,17 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
             }
 
             return (
-              <tr key={credit._id} style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={{ padding: '10px' }}>{credit.name}</td>
-                <td style={{ padding: '10px', textAlign: 'right' }}>{credit.amount.toFixed(2)} €</td>
-                <td style={{ padding: '10px', textAlign: 'right' }}>{credit.interestRate.toFixed(2)}%</td>
-                <td style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', color: '#dc3545' }}>
+              <tr key={credit._id}>
+                <td>{credit.name}</td>
+                <td>{credit.amount.toFixed(2)} €</td>
+                <td>{credit.interestRate.toFixed(2)}%</td>
+                <td>
                   {details.monthsRemaining}
                 </td>
-                <td style={{ padding: '10px', textAlign: 'right', fontWeight: 'bold', color: '#dc3545' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <td>
+                  <div>
                     <div>{details.remainingAmount.toFixed(2)} €</div>
-                    <div style={{ display: 'flex', gap: '5px' }}>
+                    <div className="credit-table-actions">
                       <input
                         type="number"
                         placeholder="Nouveau montant"
@@ -200,60 +170,22 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
                         onChange={(e) => setUpdateBalance({ ...updateBalance, [credit._id]: e.target.value })}
                         step="0.01"
                         min="0"
-                        style={{
-                          width: '80px',
-                          padding: '3px',
-                          fontSize: '0.8em',
-                          border: '1px solid #ccc',
-                          borderRadius: '3px'
-                        }}
+                        className="credit-modal-input"
                       />
-                      <button
-                        onClick={() => handleUpdateBalance(credit._id)}
-                        style={{
-                          padding: '3px 6px',
-                          backgroundColor: '#28a745',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '3px',
-                          cursor: 'pointer',
-                          fontSize: '0.8em'
-                        }}
-                      >
+                      <button onClick={() => handleUpdateBalance(credit._id)} className="credit-update-btn">
                         ✓
                       </button>
                     </div>
                   </div>
                 </td>
-                <td style={{ padding: '10px', textAlign: 'right', fontWeight: 'bold', color: '#007bff' }}>
+                <td>
                   {details.perPersonRemaining.toFixed(2)} €
                 </td>
-                <td style={{ padding: '10px', textAlign: 'center' }}>
-                  <button
-                    onClick={() => handleEdit(credit)}
-                    style={{
-                      padding: '5px 8px',
-                      backgroundColor: '#ffc107',
-                      color: 'black',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      marginRight: '5px'
-                    }}
-                  >
+                <td>
+                  <button onClick={() => handleEdit(credit)} className="credit-edit-btn">
                     Modifier
                   </button>
-                  <button
-                    onClick={() => onDeleteCredit(credit._id)}
-                    style={{
-                      padding: '5px 8px',
-                      backgroundColor: '#dc3545',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer'
-                    }}
-                  >
+                  <button onClick={() => onDeleteCredit(credit._id)} className="credit-delete-btn">
                     Supprimer
                   </button>
                 </td>
@@ -262,80 +194,57 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
           })}
         </tbody>
       </table>
-
-      <div style={{
-        backgroundColor: '#ffe6e6',
-        padding: '15px',
-        borderRadius: '8px',
-        marginTop: '15px'
-      }}>
+      <div className="credit-details-card">
         <h3>Détails des Crédits</h3>
-        <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '15px' }}>
+        <p className="small-text">
           💡 <strong>Conseil :</strong> Pour que les montants correspondent exactement à votre relevé bancaire,
           utilisez le champ "Nouveau montant" dans le tableau pour saisir le montant restant indiqué par votre banque.
         </p>
         {credits.map((credit) => {
           const details = calculateCreditDetails(credit);
           return (
-            <div key={credit._id} style={{ marginBottom: '10px' }}>
+            <div key={credit._id}>
               <button
                 onClick={() => setShowDetails(showDetails === credit._id ? null : credit._id)}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '1em',
-                  fontWeight: 'bold'
-                }}
+                className="credit-edit-btn"
               >
                 {credit.name} {showDetails === credit._id ? '▲' : '▼'}
               </button>
 
               {showDetails === credit._id && (
-                <div style={{
-                  backgroundColor: 'white',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  padding: '15px',
-                  marginTop: '10px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-                }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-                    <div style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+                <div className="credit-details-card">
+                  <div>
+                    <div className="credit-details-card">
                       <strong>Mensualité estimée:</strong><br />
                       {details.monthlyPayment.toFixed(2)} €
-                      <br /><small style={{ color: '#666' }}>(calcul théorique)</small>
+                      <br /><small className="small-text">(calcul théorique)</small>
                     </div>
-                    <div style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+                    <div className="credit-details-card">
                       <strong>Mensualité par personne:</strong><br />
                       {details.perPersonMonthly.toFixed(2)} €
-                      <br /><small style={{ color: '#666' }}>(calcul théorique)</small>
+                      <br /><small className="small-text">(calcul théorique)</small>
                     </div>
-                    <div style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+                    <div className="credit-details-card">
                       <strong>Mois écoulés:</strong><br />
                       {details.monthsElapsed}
                     </div>
-                    <div style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+                    <div className="credit-details-card">
                       <strong>Mois restants:</strong><br />
                       {details.monthsRemaining}
                     </div>
-                    <div style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+                    <div className="credit-details-card">
                       <strong>Intérêts payés:</strong><br />
                       {details.totalInterestPaid.toFixed(2)} €
                     </div>
-                    <div style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+                    <div className="credit-details-card">
                       <strong>Montant restant actuel:</strong><br />
                       {details.remainingAmount.toFixed(2)} €
                     </div>
-                    <div style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+                    <div className="credit-details-card">
                       <strong>Part par personne:</strong><br />
                       {details.perPersonRemaining.toFixed(2)} €
                     </div>
-                    <div style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+                    <div className="credit-details-card">
                       <strong>Informations:</strong><br />
                       Début: {credit.startDate}<br />
                       Durée: {credit.durationMonths} mois<br />

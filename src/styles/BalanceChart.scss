@@ -1,0 +1,53 @@
+.balance-chart {
+  &-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+
+    @media (max-width: 768px) {
+      padding: 15px;
+    }
+  }
+
+  &-title {
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+
+    @media (max-width: 768px) {
+      font-size: 16px;
+    }
+  }
+
+  &-canvas {
+    max-width: 100%;
+    height: auto;
+  }
+
+  &-loading {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-size: 14px;
+  }
+
+  &-empty {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-size: 14px;
+  }
+
+  &-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    border: 1px solid #f5c6cb;
+  }
+}

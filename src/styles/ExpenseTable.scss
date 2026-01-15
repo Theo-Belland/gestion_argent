@@ -1,0 +1,98 @@
+.expense-table {
+  &-container {
+    background: var(--surface);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+
+  thead th {
+    background: var(--primary);
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #ddd;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+  }
+
+  td {
+    padding: 10px 12px;
+  }
+
+  &-amount {
+    font-weight: 600;
+
+    &.fixed {
+      color: #dc3545;
+    }
+
+    &.variable {
+      color: #ffc107;
+    }
+  }
+}
+
+.expense-tags-container {
+  margin-top: 5px;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.expense-tag {
+  display: inline-block;
+  background: #e9ecef;
+  color: #495057;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.expense-summary {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+
+  &-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+
+    &:last-child {
+      border-bottom: none;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+  }
+
+  &-label {
+    font-weight: 600;
+  }
+
+  &-amount {
+    font-weight: 600;
+
+    &.bold {
+      color: #dc3545;
+      font-weight: bold;
+    }
+  }
+}

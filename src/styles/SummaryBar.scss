@@ -1,0 +1,61 @@
+.summary {
+  &-bar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  &-card {
+    text-align: center;
+    flex: 1;
+    min-width: 150px;
+    padding: 15px;
+
+    h3 {
+      margin: 0;
+      font-size: 1.2em;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin: 5px 0;
+      color: white;
+    }
+
+    &.positive p {
+      color: #4CAF50;
+    }
+
+    &.negative p {
+      color: #FF6B6B;
+    }
+
+    &.savings p {
+      color: #2196F3;
+    }
+
+    &-value {
+      &.positive {
+        color: #4CAF50;
+      }
+
+      &.negative {
+        color: #F44336;
+      }
+
+      &.neutral {
+        color: #2196F3;
+      }
+    }
+  }
+}

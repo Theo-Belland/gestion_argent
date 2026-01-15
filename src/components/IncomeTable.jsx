@@ -1,8 +1,47 @@
 import { useState } from 'react';
+import SearchFilter from './SearchFilter';
+import '../styles/searchFilter.scss';
+import '../styles/IncomeTable.scss';
 
 function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({});
+  const [filters, setFilters] = useState(null);
+
+  const applyFilters = (incomeList) => {
+    if (!filters) return incomeList;
+
+    return incomeList.filter(inc => {
+      if (filters.search && !inc.description.toLowerCase().includes(filters.search.toLowerCase())) {
+        return false;
+      }
+
+      if (filters.dateFrom && new Date(inc.date) < new Date(filters.dateFrom)) {
+        return false;
+      }
+      if (filters.dateTo && new Date(inc.date) > new Date(filters.dateTo)) {
+        return false;
+      }
+
+      if (filters.minAmount && inc.amount < parseFloat(filters.minAmount)) {
+        return false;
+      }
+      if (filters.maxAmount && inc.amount > parseFloat(filters.maxAmount)) {
+        return false;
+      }
+
+      // Filtre tags
+      if (filters.tags && filters.tags.length > 0) {
+        if (!inc.tags || !filters.tags.some(tag => inc.tags.includes(tag))) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  };
+
+  const filteredIncomes = applyFilters(incomes);
 
   const startEdit = (id) => {
     const income = incomes.find(inc => inc._id === id);
@@ -20,9 +59,10 @@ function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
   };
 
   return (
-    <div>
+    <div className="income-table-container">
+      <SearchFilter onFilterChange={setFilters} />
       <h3>Revenus</h3>
-      <table>
+      <table className="income-table">
         <thead>
           <tr>
             <th>Description</th>
@@ -33,7 +73,7 @@ function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
           </tr>
         </thead>
         <tbody>
-          {incomes.map((inc) => (
+          {filteredIncomes.map((inc) => (
             <tr key={inc._id}>
               {editId === inc._id ? (
                 <>
@@ -42,6 +82,17 @@ function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
                   <td><input type="date" value={editData.date} onChange={(e) => setEditData({ ...editData, date: e.target.value })} /></td>
                   <td><input type="checkbox" checked={editData.isRecurring} onChange={(e) => setEditData({ ...editData, isRecurring: e.target.checked })} /></td>
                   <td>
+                    {inc.description}
+                    {inc.tags && inc.tags.length > 0 && (
+                      <div className="income-table-tags">
+                        {inc.tags.map((tag, i) => (
+                          <span key={i} className="income-table-tag">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  
                     <button onClick={saveEdit}>Sauvegarder</button>
                     <button onClick={cancelEdit}>Annuler</button>
                   </td>

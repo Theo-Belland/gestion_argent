@@ -1,0 +1,387 @@
+.savings {
+  &-table-container {
+    background: var(--surface);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+
+  &-empty {
+    color: #666;
+    text-align: center;
+    padding: 20px;
+
+    &-message {
+      color: #666;
+    }
+  }
+
+  &-main {
+    background: var(--surface);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  &-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+
+    thead tr {
+      background-color: #e8f4f8;
+      border-bottom: 2px solid #007bff;
+    }
+
+    th {
+      padding: 10px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #ddd;
+
+      &:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+
+    td {
+      padding: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+    }
+
+    &-wrapper {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      flex: 1;
+      min-width: 300px;
+    }
+
+    &-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    &-align-center {
+      text-align: center;
+    }
+
+    &-align-right {
+      text-align: right;
+    }
+  }
+}
+
+.savings {
+  &-interest {
+    color: #28a745;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+  }
+
+  &-tooltip {
+    position: absolute;
+    background: #333;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    top: -30px;
+    left: 0;
+    white-space: nowrap;
+    z-index: 10;
+
+    &-container {
+      position: relative;
+    }
+  }
+
+  &-total {
+    color: #007bff;
+    font-weight: bold;
+  }
+
+  &-actions {
+    display: flex;
+    gap: 5px;
+  }
+
+  &-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &-edit {
+      background: #2196F3;
+      color: white;
+    }
+
+    &-delete {
+      background: #dc3545;
+      color: white;
+    }
+  }
+}
+
+.savings {
+  &-mobile {
+    &-view {
+      background: var(--surface);
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    &-item {
+      margin-bottom: 10px;
+      padding: 15px;
+      background: white;
+      border-radius: 6px;
+      border-left: 4px solid var(--primary);
+    }
+
+    &-label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: var(--text);
+    }
+
+    &-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+  }
+
+  &-modal {
+    background: var(--surface);
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+    &-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    &-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    &-field {
+      margin-bottom: 15px;
+    }
+
+    &-label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    &-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+  }
+
+  &-header {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    flex: 1;
+    min-width: 300px;
+
+    &-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  }
+
+  &-edit {
+    &-row {
+      background-color: #fff3cd;
+      border-bottom: 1px solid #ddd;
+    }
+
+    &-cell {
+      padding: 10px;
+    }
+  }
+
+  &-amount-cell {
+    padding: 10px;
+  }
+
+  &-date-cell {
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9em;
+  }
+}
+
+.savings {
+  &-add {
+    &-section {
+      background-color: #e8f4f8;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+
+      &-title {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+    }
+
+    &-item {
+      margin-bottom: 10px;
+    }
+
+    &-input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    &-button {
+      padding: 8px 15px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+
+  &-section {
+    &-label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    &-inputs {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  &-remove-button {
+    padding: 8px 15px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &-toggle-button {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: #0056b3;
+    }
+  }
+
+  &-accordion-content {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  &-save-button {
+    padding: 5px 10px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+    font-weight: bold;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &-cancel-button {
+    padding: 5px 10px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}

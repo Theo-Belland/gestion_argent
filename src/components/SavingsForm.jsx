@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../styles/SavingsForm.scss';
 
 function SavingsForm({ onAddSavings }) {
   const [name, setName] = useState('');
@@ -36,18 +37,11 @@ function SavingsForm({ onAddSavings }) {
   };
 
   return (
-    <div style={{
-      backgroundColor: '#f0f8ff',
-      padding: '20px',
-      borderRadius: '8px',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      flex: '1',
-      minWidth: '300px'
-    }}>
+    <div className="savings-form-container">
       <h2>Ajouter une Épargne</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+        <div className="form-group">
+          <label className="form-label">
             Nom de l'épargne:
           </label>
           <input
@@ -55,18 +49,12 @@ function SavingsForm({ onAddSavings }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ex: Vacances, Voiture..."
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="form-input"
           />
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+        <div className="form-group">
+          <label className="form-label">
             Montant Initial (€):
           </label>
           <input
@@ -76,18 +64,12 @@ function SavingsForm({ onAddSavings }) {
             placeholder="0.00"
             step="0.01"
             min="0"
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="form-input"
           />
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+        <div className="form-group">
+          <label className="form-label">
             Taux d'Intérêt (%):
           </label>
           <input
@@ -98,67 +80,39 @@ function SavingsForm({ onAddSavings }) {
             step="0.01"
             min="0"
             max="100"
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="form-input"
           />
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+        <div className="form-group">
+          <label className="form-label">
             Périodicité de l'Intérêt:
           </label>
           <select
             value={frequency}
             onChange={(e) => setFrequency(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="form-select"
           >
             <option value="annual">Annuel</option>
             <option value="monthly">Mensuel</option>
           </select>
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+        <div className="form-group">
+          <label className="form-label">
             Date de Début:
           </label>
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="form-input"
           />
         </div>
 
         <button
           type="submit"
-          style={{
-            width: '100%',
-            padding: '10px',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '1em',
-            fontWeight: 'bold'
-          }}
+          className="form-submit-btn"
         >
           Ajouter l'Épargne
         </button>

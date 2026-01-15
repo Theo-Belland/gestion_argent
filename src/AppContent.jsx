@@ -11,6 +11,15 @@ import SavingsForm from './components/SavingsForm';
 import SavingsTable from './components/SavingsTable';
 import CreditForm from './components/CreditForm';
 import CreditTable from './components/CreditTable';
+import GoalForm from './components/GoalForm';
+import GoalTable from './components/GoalTable';
+import BudgetForm from './components/BudgetForm';
+import BudgetTable from './components/BudgetTable';
+import ExportButtons from './components/ExportButtons';
+import ImportCSV from './components/ImportCSV';
+import UserProfile from './components/UserProfile';
+import Dashboard from './components/Dashboard';
+import './styles/AppContent.scss';
 
 const API_BASE = 'http://localhost:5000/api';
 
@@ -19,6 +28,8 @@ function AppContent() {
   const [expenses, setExpenses] = useState([]);
   const [savings, setSavings] = useState([]);
   const [credits, setCredits] = useState([]);
+  const [goals, setGoals] = useState([]);
+  const [budgets, setBudgets] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -95,21 +106,27 @@ function AppContent() {
 
     const fetchData = async () => {
       try {
-        const [incomesRes, expensesRes, savingsRes, creditsRes] = await Promise.all([
+        const [incomesRes, expensesRes, savingsRes, creditsRes, goalsRes, budgetsRes] = await Promise.all([
           fetch(`${API_BASE}/incomes`, { headers: getAuthHeaders() }),
           fetch(`${API_BASE}/expenses`, { headers: getAuthHeaders() }),
           fetch(`${API_BASE}/savings`, { headers: getAuthHeaders() }),
-          fetch(`${API_BASE}/credits`, { headers: getAuthHeaders() })
+          fetch(`${API_BASE}/credits`, { headers: getAuthHeaders() }),
+          fetch(`${API_BASE}/goals`, { headers: getAuthHeaders() }),
+          fetch(`${API_BASE}/budgets`, { headers: getAuthHeaders() })
         ]);
         const incomesData = await incomesRes.json();
         const expensesData = await expensesRes.json();
         const savingsData = await savingsRes.json();
         const creditsData = await creditsRes.json();
+        const goalsData = await goalsRes.json();
+        const budgetsData = await budgetsRes.json();
         setIncomes(incomesData);
         setExpenses(expensesData);
         setSavings(savingsData);
         setCredits(creditsData);
-        console.log('Data loaded:', { incomesData, expensesData, savingsData, creditsData });
+        setGoals(goalsData);
+        setBudgets(budgetsData);
+        console.log('Data loaded:', { incomesData, expensesData, savingsData, creditsData, goalsData, budgetsData });
       } catch (err) {
         console.error('Error fetching data:', err);
         if (err.message.includes('401')) {
@@ -122,6 +139,26 @@ function AppContent() {
     };
     fetchData();
   }, [user, navigate]);
+
+  const fetchIncomes = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/incomes`, { headers: getAuthHeaders() });
+      const data = await res.json();
+      setIncomes(data);
+    } catch (err) {
+      console.error('Error fetching incomes:', err);
+    }
+  };
+
+  const fetchExpenses = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/expenses`, { headers: getAuthHeaders() });
+      const data = await res.json();
+      setExpenses(data);
+    } catch (err) {
+      console.error('Error fetching expenses:', err);
+    }
+  };
 
   const addIncome = async (income) => {
     try {
@@ -387,15 +424,7 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '1.2em'
-      }}>
-        Chargement...
-      </div>
+      <div className="app-main-content">Chargement...</div>
     );
   }
 
@@ -404,59 +433,24 @@ function AppContent() {
   }
 
   return (
-    <div className="App">
-      <nav style={{
-        background: '#333',
-        color: 'white',
-        padding: '10px',
-        marginBottom: '20px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: '20px'
-      }}>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <Link to="/" style={{ color: 'white', textDecoration: 'none', fontSize: '1.2em' }}>Accueil</Link>
-          <Link to="/app" style={{ color: 'white', textDecoration: 'none', fontSize: '1.2em' }}>App</Link>
-          <Link to="/blog" style={{ color: 'white', textDecoration: 'none', fontSize: '1.2em' }}>Blog</Link>
-          <Link to="/app/epargnes" style={{ color: 'white', textDecoration: 'none', fontSize: '1.2em' }}>Épargnes</Link>
-          <Link to="/app/credits" style={{ color: 'white', textDecoration: 'none', fontSize: '1.2em' }}>Crédits</Link>
-          <Link to="/app/rapports" style={{ color: 'white', textDecoration: 'none', fontSize: '1.2em' }}>Rapports</Link>
-          {user && user.role === 'admin' && (
-            <Link to="/admin" style={{ color: 'white', textDecoration: 'none', fontSize: '1.2em' }}>Admin</Link>
-          )}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <span>Bonjour, {user.email}</span>
-          <button
-            onClick={handleLogout}
-            style={{
-              background: '#dc3545',
-              color: 'white',
-              border: 'none',
-              padding: '5px 10px',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Déconnexion
-          </button>
-        </div>
-      </nav>
+    <div className="app-content-container">
+
 
       <Routes>
-        <Route path="" element={
+        <Route index element={<Dashboard incomes={incomes} expenses={expenses} savings={savings} goals={goals} budgets={budgets} />} />
+        <Route path="transactions" element={
           <>
             <SummaryBar incomes={incomes} expenses={expenses} savings={savings} />
             <h1>Gestion de l'Argent</h1>
-            <button onClick={resetData} style={{ backgroundColor: 'red', color: 'white', padding: '10px', margin: '10px' }}>Remettre à zéro toutes les données</button>
-            <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
+            <ExportButtons incomes={incomes} expenses={expenses} />
+            <button onClick={resetData} className="app-reset-button">Remettre à zéro toutes les données</button>
+            <div className="app-form-container">
               <IncomeForm onAddIncome={addIncome} />
               <ExpenseForm onAddExpense={addExpense} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
+            <div className="app-form-container">
               <IncomeTable incomes={incomes} onDeleteIncome={deleteIncome} onEditIncome={editIncome} />
-              <div style={{ flex: '1' }}>
+              <div className="app-card">
                 <ExpenseTable expenses={expenses} credits={credits} onDeleteExpense={deleteExpense} onEditExpense={editExpense} />
               </div>
             </div>
@@ -467,7 +461,7 @@ function AppContent() {
           <>
             <SummaryBar incomes={incomes} expenses={expenses} savings={savings} />
             <h1>Mes Épargnes</h1>
-            <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
+            <div className="app-form-container">
               <SavingsForm onAddSavings={addSavings} />
               <SavingsTable 
                 savings={savings} 
@@ -483,7 +477,7 @@ function AppContent() {
           <>
             <SummaryBar incomes={incomes} expenses={expenses} savings={savings} />
             <h1>Mes Crédits</h1>
-            <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
+            <div className="app-form-container">
               <CreditForm onAddCredit={addCredit} />
               <CreditTable 
                 credits={credits} 
@@ -501,6 +495,42 @@ function AppContent() {
             <MonthlyReport incomes={incomes} expenses={expenses} />
           </>
         } />
+        <Route path="objectifs" element={
+          <>
+            <h1>Mes Objectifs Financiers</h1>
+            <div className="app-form-container">
+              <GoalForm onGoalAdded={(goal) => setGoals([...goals, goal])} />
+            </div>
+            <GoalTable 
+              goals={goals} 
+              onGoalDeleted={(id) => setGoals(goals.filter(g => g._id !== id))}
+              onGoalUpdated={(updated) => setGoals(goals.map(g => g._id === updated._id ? updated : g))}
+            />
+          </>
+        } />
+        <Route path="budgets" element={
+          <>
+            <h1>Mes Budgets</h1>
+            <div className="app-form-container">
+              <BudgetForm onBudgetAdded={(budget) => setBudgets([...budgets, budget])} />
+            </div>
+            <BudgetTable 
+              budgets={budgets} 
+              onBudgetDeleted={(id) => setBudgets(budgets.filter(b => b._id !== id))}
+              onBudgetUpdated={(updated) => setBudgets(budgets.map(b => b._id === updated._id ? updated : b))}
+            />
+          </>
+        } />
+        <Route path="import" element={
+          <>
+            <h1>Import de données</h1>
+            <div className="app-section">
+              <ImportCSV type="income" onImportComplete={fetchIncomes} />
+              <ImportCSV type="expense" onImportComplete={fetchExpenses} />
+            </div>
+          </>
+        } />
+        <Route path="profile" element={<UserProfile />} />
       </Routes>
     </div>
   );

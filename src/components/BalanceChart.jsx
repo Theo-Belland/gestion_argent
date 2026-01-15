@@ -1,4 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
+import '../styles/BalanceChart.scss';
 
 function BalanceChart({ incomes, expenses }) {
   const totalIncome = incomes.reduce((sum, inc) => sum + (inc.amount || 0), 0);
@@ -14,16 +15,16 @@ function BalanceChart({ incomes, expenses }) {
 
   if (data.length === 0) {
     return (
-      <div>
-        <h3>Diagramme des Dépenses et Solde</h3>
-        <p>Aucune donnée à afficher.</p>
+      <div className="balance-chart-container">
+        <h3 className="balance-chart-title">Diagramme des Dépenses et Solde</h3>
+        <p className="balance-chart-empty">Aucune donnée à afficher.</p>
       </div>
     );
   }
 
   return (
-    <div>
-      <h3>Diagramme des Dépenses et Solde</h3>
+    <div className="balance-chart-container">
+      <h3 className="balance-chart-title">Diagramme des Dépenses et Solde</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
@@ -43,7 +44,7 @@ function BalanceChart({ incomes, expenses }) {
           <Legend />
         </PieChart>
       </ResponsiveContainer>
-      <p>Solde Total: {balance} €</p>
+      <p className="balance-chart-total">Solde Total: {balance} €</p>
     </div>
   );
 }

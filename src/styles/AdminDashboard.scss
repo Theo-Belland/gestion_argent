@@ -1,0 +1,211 @@
+.admin-dashboard-container {
+  padding: 20px;
+}
+
+.admin-navbar {
+  background: var(--surface);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  &-left {
+    display: flex;
+    gap: 20px;
+  }
+
+  &-logo {
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.admin-tab-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &.active {
+    background: var(--primary);
+    color: white;
+  }
+
+  &.inactive {
+    background: #ccc;
+    color: black;
+  }
+}
+
+.admin-content {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-section {
+  flex: 1;
+  min-width: 300px;
+
+  &-wide {
+    flex: 2;
+  }
+}
+
+.admin-form {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+
+  &-group {
+    margin-bottom: 15px;
+  }
+
+  &-input,
+  &-textarea,
+  &-select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-family: inherit;
+  }
+
+  &-textarea {
+    font-family: monospace;
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  &-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.admin-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &-primary {
+    background: #764ba2;
+    color: white;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &-secondary {
+    background: #667eea;
+    color: white;
+  }
+
+  &-edit {
+    background: #2196F3;
+    color: white;
+    padding: 4px 8px;
+    font-size: 0.9em;
+    margin-right: 5px;
+  }
+
+  &-delete {
+    background: #dc3545;
+    color: white;
+    padding: 4px 8px;
+    font-size: 0.9em;
+  }
+}
+
+.admin-toggle-btn {
+  margin-bottom: 15px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+  }
+
+  tr {
+    &:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+}
+
+.status-badge {
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: white;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.status-published {
+  background: #4CAF50;
+}
+
+.status-draft {
+  background: #ff9800;
+}
+
+.admin-promote-btn {
+  background: blue;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.admin-delete-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}

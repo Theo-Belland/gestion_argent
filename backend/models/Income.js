@@ -7,7 +7,8 @@ const incomeSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   category: { type: String },
   isRecurring: { type: Boolean, default: false },
-  period: { type: String, default: 'monthly' }
+  period: { type: String, default: 'monthly' },
+  tags: { type: [String], default: [] }
 });
 
 module.exports = mongoose.model('Income', incomeSchema);

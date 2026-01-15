@@ -1,0 +1,87 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.App {
+  text-align: center;
+}
+
+form {
+  background: var(--surface);
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px var(--shadow);
+  width: 45%;
+  min-width: 300px;
+  transition: background-color 0.3s ease;
+}
+
+input, 
+select, 
+button {
+  margin: 5px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface);
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #45a049;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 100%;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px var(--shadow);
+  transition: background-color 0.3s ease;
+}
+
+th, 
+td {
+  border: 1px solid var(--border);
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: var(--hover);
+  font-weight: bold;
+}
+
+tr {
+  &:nth-child(even) {
+    background-color: var(--hover);
+  }
+
+  &:hover {
+    background-color: var(--hover);
+    opacity: 0.9;
+  }
+}

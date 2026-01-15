@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../styles/SavingsTable.scss';
 
 function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavings, onEditSavings }) {
   const [editingId, setEditingId] = useState(null);
@@ -70,43 +71,27 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
 
   if (savings.length === 0) {
     return (
-      <div style={{
-        backgroundColor: '#f9f9f9',
-        padding: '20px',
-        borderRadius: '8px',
-        flex: '1',
-        minWidth: '300px'
-      }}>
-        <h2>Mes Épargnes</h2>
-        <p style={{ color: '#666' }}>Aucune épargne enregistrée.</p>
+      <div className="savings-header">
+        <h2 className="savings-header-title">Mes Épargnes</h2>
+        <p className="savings-empty-message">Aucune épargne enregistrée.</p>
       </div>
     );
   }
 
   return (
-    <div style={{
-      backgroundColor: '#f9f9f9',
-      padding: '20px',
-      borderRadius: '8px',
-      flex: '1',
-      minWidth: '300px'
-    }}>
-      <h2>Mes Épargnes</h2>
-      <table style={{
-        width: '100%',
-        borderCollapse: 'collapse',
-        marginBottom: '20px'
-      }}>
+    <div className="savings-table-wrapper">
+      <h2 className="savings-table-title">Mes Épargnes</h2>
+      <table className="savings-table">
         <thead>
-          <tr style={{ backgroundColor: '#e8f4f8', borderBottom: '2px solid #007bff' }}>
-            <th style={{ padding: '10px', textAlign: 'left' }}>Nom</th>
-            <th style={{ padding: '10px', textAlign: 'right' }}>Montant Initial</th>
-            <th style={{ padding: '10px', textAlign: 'right' }}>Taux (%)</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Périodicité</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Date Début</th>
-            <th style={{ padding: '10px', textAlign: 'right' }}>Intérêts Gagnés</th>
-            <th style={{ padding: '10px', textAlign: 'right' }}>Total</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Actions</th>
+          <tr>
+            <th>Nom</th>
+            <th className="savings-table-align-right">Montant Initial</th>
+            <th className="savings-table-align-right">Taux (%)</th>
+            <th className="savings-table-align-center">Périodicité</th>
+            <th className="savings-table-align-center">Date Début</th>
+            <th className="savings-table-align-right">Intérêts Gagnés</th>
+            <th className="savings-table-align-right">Total</th>
+            <th className="savings-table-align-center">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -116,76 +101,56 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
 
             if (isEditing) {
               return (
-                <tr key={savingsItem._id} style={{ backgroundColor: '#fff3cd', borderBottom: '1px solid #ddd' }}>
-                  <td style={{ padding: '10px' }}>
+                <tr key={savingsItem._id} className="savings-edit-row">
+                  <td className="savings-edit-cell">
                     <input
                       type="text"
                       value={editData.name}
                       onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                      style={{ width: '100%', padding: '5px' }}
                     />
                   </td>
-                  <td style={{ padding: '10px', textAlign: 'right' }}>
+                  <td className="savings-edit-cell savings-table-align-right">
                     <input
                       type="number"
                       value={editData.amount}
                       onChange={(e) => setEditData({ ...editData, amount: parseFloat(e.target.value) })}
-                      style={{ width: '100%', padding: '5px' }}
                       step="0.01"
                     />
                   </td>
-                  <td style={{ padding: '10px', textAlign: 'right' }}>
+                  <td className="savings-edit-cell savings-table-align-right">
                     <input
                       type="number"
                       value={editData.interestRate}
                       onChange={(e) => setEditData({ ...editData, interestRate: parseFloat(e.target.value) })}
-                      style={{ width: '100%', padding: '5px' }}
                       step="0.01"
                     />
                   </td>
-                  <td style={{ padding: '10px', textAlign: 'center' }}>
+                  <td className="savings-edit-cell savings-table-align-center">
                     <select
                       value={editData.frequency}
                       onChange={(e) => setEditData({ ...editData, frequency: e.target.value })}
-                      style={{ width: '100%', padding: '5px' }}
                     >
                       <option value="annual">Annuel</option>
                       <option value="monthly">Mensuel</option>
                     </select>
                   </td>
-                  <td style={{ padding: '10px', textAlign: 'center' }}>
+                  <td className="savings-edit-cell savings-table-align-center">
                     <input
                       type="date"
                       value={editData.startDate}
                       onChange={(e) => setEditData({ ...editData, startDate: e.target.value })}
-                      style={{ width: '100%', padding: '5px' }}
                     />
                   </td>
-                  <td colSpan="2" style={{ padding: '10px', textAlign: 'center' }}>
+                  <td colSpan="2" className="savings-edit-cell savings-table-align-center">
                     <button
                       onClick={() => handleSaveEdit(savingsItem._id)}
-                      style={{
-                        padding: '5px 10px',
-                        backgroundColor: '#28a745',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        marginRight: '5px'
-                      }}
+                      className="savings-save-button"
                     >
                       Valider
                     </button>
                     <button
                       onClick={() => setEditingId(null)}
-                      style={{
-                        padding: '5px 10px',
-                        backgroundColor: '#6c757d',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                      }}
+                      className="savings-cancel-button"
                     >
                       Annuler
                     </button>
@@ -195,70 +160,41 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
             }
 
             return (
-              <tr key={savingsItem._id} style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={{ padding: '10px' }}>{savingsItem.name}</td>
-                <td style={{ padding: '10px', textAlign: 'right' }}>{savingsItem.amount.toFixed(2)} €</td>
-                <td style={{ padding: '10px', textAlign: 'right' }}>{savingsItem.interestRate.toFixed(2)}%</td>
-                <td style={{ padding: '10px', textAlign: 'center' }}>
+              <tr key={savingsItem._id}>
+                <td>{savingsItem.name}</td>
+                <td className="savings-table-align-right">{savingsItem.amount.toFixed(2)} €</td>
+                <td className="savings-table-align-right">{savingsItem.interestRate.toFixed(2)}%</td>
+                <td className="savings-table-align-center">
                   {savingsItem.frequency === 'monthly' ? 'Mensuel' : 'Annuel'}
                 </td>
-                <td style={{ padding: '10px', textAlign: 'center', fontSize: '0.9em' }}>
+                <td className="savings-date-cell">
                   {new Date(savingsItem.startDate).toLocaleDateString('fr-FR')}
                 </td>
                 <td 
-                  style={{ padding: '10px', textAlign: 'right', color: '#28a745', fontWeight: 'bold', cursor: 'pointer', position: 'relative' }}
+                  className="savings-interest savings-tooltip-container"
                   onMouseEnter={() => setShowDetails(savingsItem._id)}
                   onMouseLeave={() => setShowDetails(null)}
                 >
                   +{interest.toFixed(2)} €
                   {showDetails === savingsItem._id && (
-                    <div style={{
-                      position: 'absolute',
-                      bottom: '100%',
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      backgroundColor: '#333',
-                      color: 'white',
-                      padding: '10px',
-                      borderRadius: '4px',
-                      fontSize: '0.9em',
-                      whiteSpace: 'nowrap',
-                      zIndex: 10,
-                      marginBottom: '5px',
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-                    }}>
+                    <div className="savings-tooltip">
                       {Math.floor(days)} jours • {new Date(savingsItem.startDate).toLocaleDateString('fr-FR')}
                     </div>
                   )}
                 </td>
-                <td style={{ padding: '10px', textAlign: 'right', fontWeight: 'bold', color: '#007bff' }}>
+                <td className="savings-total">
                   {total.toFixed(2)} €
                 </td>
-                <td style={{ padding: '10px', textAlign: 'center' }}>
+                <td className="savings-table-align-center">
                   <button
                     onClick={() => handleEdit(savingsItem)}
-                    style={{
-                      padding: '5px 8px',
-                      backgroundColor: '#ffc107',
-                      color: 'black',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      marginRight: '5px'
-                    }}
+                    className="savings-btn savings-btn-edit"
                   >
                     Modifier
                   </button>
                   <button
                     onClick={() => onDeleteSavings(savingsItem._id)}
-                    style={{
-                      padding: '5px 8px',
-                      backgroundColor: '#dc3545',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer'
-                    }}
+                    className="savings-btn savings-btn-delete"
                   >
                     Supprimer
                   </button>
@@ -269,46 +205,24 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
         </tbody>
       </table>
 
-      <div style={{
-        backgroundColor: '#e8f4f8',
-        padding: '15px',
-        borderRadius: '8px',
-        marginTop: '15px'
-      }}>
-        <h3>Ajouter ou Retirer des Montants</h3>
+      <div className="savings-add-section">
+        <h3 className="savings-add-section-title">Ajouter ou Retirer des Montants</h3>
         {savings.map((savingsItem) => (
-          <div key={savingsItem._id} style={{ marginBottom: '10px' }}>
+          <div key={savingsItem._id} className="savings-add-item">
             <button
               onClick={() => setModalOpen(modalOpen === savingsItem._id ? null : savingsItem._id)}
-              style={{
-                width: '100%',
-                padding: '10px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '1em',
-                fontWeight: 'bold'
-              }}
+              className="savings-toggle-button"
             >
               {savingsItem.name} {modalOpen === savingsItem._id ? '▲' : '▼'}
             </button>
 
             {modalOpen === savingsItem._id && (
-              <div style={{
-                backgroundColor: 'white',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                padding: '15px',
-                marginTop: '10px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-              }}>
-                <div style={{ marginBottom: '15px' }}>
-                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+              <div className="savings-accordion-content">
+                <div className="savings-modal-field">
+                  <label className="savings-modal-label">
                     Ajouter un montant:
                   </label>
-                  <div style={{ display: 'flex', gap: '10px' }}>
+                  <div className="savings-section-inputs">
                     <input
                       type="number"
                       placeholder="Montant à ajouter"
@@ -316,24 +230,11 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                       onChange={(e) => setAddAmount({ ...addAmount, [savingsItem._id]: e.target.value })}
                       step="0.01"
                       min="0"
-                      style={{
-                        flex: 1,
-                        padding: '8px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px'
-                      }}
+                      className="savings-add-input"
                     />
                     <button
                       onClick={() => handleAddAmount(savingsItem._id)}
-                      style={{
-                        padding: '8px 15px',
-                        backgroundColor: '#28a745',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold'
-                      }}
+                      className="savings-add-button"
                     >
                       Ajouter
                     </button>
@@ -341,10 +242,10 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                  <label className="savings-modal-label">
                     Retirer un montant:
                   </label>
-                  <div style={{ display: 'flex', gap: '10px' }}>
+                  <div className="savings-section-inputs">
                     <input
                       type="number"
                       placeholder="Montant à retirer"
@@ -352,24 +253,11 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                       onChange={(e) => setWithdrawAmount({ ...withdrawAmount, [savingsItem._id]: e.target.value })}
                       step="0.01"
                       min="0"
-                      style={{
-                        flex: 1,
-                        padding: '8px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px'
-                      }}
+                      className="savings-add-input"
                     />
                     <button
                       onClick={() => handleWithdrawAmount(savingsItem._id)}
-                      style={{
-                        padding: '8px 15px',
-                        backgroundColor: '#dc3545',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold'
-                      }}
+                      className="savings-remove-button"
                     >
                       Retirer
                     </button>

@@ -13,7 +13,9 @@ const allowedOrigins = [
   process.env.CLIENT_URL || 'http://localhost:5173',
   'http://127.0.0.1:5173',
   'http://localhost:4173',
-  'http://127.0.0.1:4173'
+  'http://127.0.0.1:4173',
+  'http://localhost:5174',
+  'http://127.0.0.1:5174'
 ];
 
 const corsOptions = {
@@ -34,6 +36,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/profile', require('./routes/profile'));
 app.use('/api/incomes', require('./routes/incomes'));
 app.use('/api/expenses', require('./routes/expenses'));
 app.use('/api/savings', require('./routes/savings'));
@@ -41,6 +44,9 @@ app.use('/api/credits', require('./routes/credits'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/metrics', require('./routes/metrics'));
 app.use('/api/blog', require('./routes/blog'));
+app.use('/api/goals', require('./routes/goals'));
+app.use('/api/budgets', require('./routes/budgets'));
+app.use('/api/password-reset', require('./routes/passwordReset'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

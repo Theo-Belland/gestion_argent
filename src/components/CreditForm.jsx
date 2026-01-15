@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../styles/CreditForm.scss';
 
 function CreditForm({ onAddCredit }) {
   const [name, setName] = useState('');
@@ -37,39 +38,22 @@ function CreditForm({ onAddCredit }) {
   };
 
   return (
-    <div style={{
-      backgroundColor: '#fff5f5',
-      padding: '20px',
-      borderRadius: '8px',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      flex: '1',
-      minWidth: '300px'
-    }}>
+    <div className="credit-form-container">
       <h2>Ajouter un Crédit</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-            Nom du crédit:
-          </label>
+        <div className="credit-form-group">
+          <label className="credit-form-group label">Nom du crédit:</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ex: Voiture, Maison..."
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="credit-form-group input"
           />
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-            Montant emprunté (€):
-          </label>
+        <div className="credit-form-group">
+          <label className="credit-form-group label">Montant emprunté (€):</label>
           <input
             type="number"
             value={amount}
@@ -77,20 +61,12 @@ function CreditForm({ onAddCredit }) {
             placeholder="0.00"
             step="0.01"
             min="0"
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="credit-form-group input"
           />
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-            Taux d'intérêt annuel (%):
-          </label>
+        <div className="credit-form-group">
+          <label className="credit-form-group label">Taux d'intérêt annuel (%):</label>
           <input
             type="number"
             value={interestRate}
@@ -99,20 +75,12 @@ function CreditForm({ onAddCredit }) {
             step="0.01"
             min="0"
             max="50"
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="credit-form-group input"
           />
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-            Durée (mois):
-          </label>
+        <div className="credit-form-group">
+          <label className="credit-form-group label">Durée (mois):</label>
           <input
             type="number"
             value={durationMonths}
@@ -120,20 +88,12 @@ function CreditForm({ onAddCredit }) {
             placeholder="Ex: 60"
             min="1"
             max="360"
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="credit-form-group input"
           />
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-            Montant restant actuel (€):
-          </label>
+        <div className="credit-form-group">
+          <label className="credit-form-group label">Montant restant actuel (€):</label>
           <input
             type="number"
             value={currentBalance}
@@ -141,51 +101,24 @@ function CreditForm({ onAddCredit }) {
             placeholder="Montant indiqué par votre banque"
             step="0.01"
             min="0"
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="credit-form-group input"
           />
-          <small style={{ color: '#666', fontSize: '0.9em' }}>
+          <small className="credit-form-help-text">
             Laissez vide si c'est un nouveau crédit
           </small>
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-            Date de début:
-          </label>
+        <div className="credit-form-group">
+          <label className="credit-form-group label">Date de début:</label>
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              boxSizing: 'border-box'
-            }}
+            className="credit-form-group input"
           />
         </div>
 
-        <button
-          type="submit"
-          style={{
-            width: '100%',
-            padding: '10px',
-            backgroundColor: '#dc3545',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '1em',
-            fontWeight: 'bold'
-          }}
-        >
+        <button type="submit" className="credit-form-submit">
           Ajouter le Crédit
         </button>
       </form>

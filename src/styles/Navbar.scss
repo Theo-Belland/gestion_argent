@@ -1,0 +1,213 @@
+.navbar-multi-dropdowns {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+.navbar-multi-dropdown-wrapper {
+  position: relative;
+}
+.navbar-multi-dropdown-toggle {
+  background: #f7f7f7;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 0.4rem 1.1rem 0.4rem 0.9rem;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s, border 0.2s;
+}
+.navbar-multi-dropdown-toggle:hover, .navbar-multi-dropdown-toggle:focus {
+  background: #eaf1fb;
+  border-color: #b3c6e7;
+}
+.navbar-multi-dropdown-wrapper.open > .navbar-multi-dropdown-toggle {
+  background: #eaf1fb;
+  border-color: #b3c6e7;
+}
+.navbar-multi-dropdown-wrapper .navbar-dropdown-menu {
+  position: absolute;
+  left: 0;
+  top: 110%;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  padding: 0.3rem 0;
+}
+.multi-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.submenu-group {
+  position: relative;
+}
+.submenu-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 1em;
+  color: #2d6cdf;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem 0.5rem 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.18s;
+}
+.submenu-toggle:hover, .submenu-toggle:focus {
+  background: #f0f6ff;
+}
+.navbar-submenu {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
+  padding: 0.2rem 0;
+}
+.submenu-group.open > .submenu-toggle {
+  background: #eaf1fb;
+}
+.navbar-dropdown-group {
+  padding: 0.2rem 0 0.2rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  &:last-child {
+    border-bottom: none;
+  }
+}
+.navbar-dropdown-group-title {
+  display: block;
+  font-size: 0.92em;
+  color: #888;
+  font-weight: 600;
+  padding: 0.3rem 1.2rem 0.1rem 1.2rem;
+  letter-spacing: 0.5px;
+}
+.navbar-general {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0.5rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2d6cdf;
+  text-decoration: none;
+}
+
+
+.navbar-dropdown-wrapper {
+  position: relative;
+}
+
+.navbar-dropdown-toggle {
+  background: #f7f7f7;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 0.4rem 1.1rem 0.4rem 0.9rem;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s, border 0.2s;
+}
+
+.navbar-dropdown-toggle:hover, .navbar-dropdown-toggle:focus {
+  background: #eaf1fb;
+  border-color: #b3c6e7;
+}
+
+.navbar-dropdown-arrow {
+  font-size: 0.8em;
+  margin-left: 0.3em;
+}
+
+.navbar-dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  min-width: 170px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  padding: 0.3rem 0;
+}
+
+.navbar-dropdown-item {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.navbar-dropdown-item:hover, .navbar-dropdown-item:focus {
+  background: #f0f6ff;
+}
+.navbar-dropdown-item.logout {
+  color: #e74c3c;
+}
+
+.navbar-link {
+  color: #333;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+
+.navbar-link:hover {
+  color: #2d6cdf;
+}
+
+.navbar-user {
+  margin-right: 1rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.navbar-logout {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.navbar-logout:hover {
+  background: #c0392b;
+}

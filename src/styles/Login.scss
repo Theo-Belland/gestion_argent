@@ -1,0 +1,126 @@
+.login {
+  &-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    @media (max-width: 480px) {
+      margin: 30px 10px;
+      max-width: none;
+    }
+  }
+
+  &-header {
+    text-align: center;
+    margin-bottom: 30px;
+
+    h2 {
+      color: #333;
+      font-size: 24px;
+      margin: 0;
+
+      @media (max-width: 480px) {
+        font-size: 20px;
+      }
+    }
+  }
+
+  &-form {
+    display: flex;
+    flex-direction: column;
+
+    &-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+        font-size: 14px;
+      }
+
+      input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        font-family: inherit;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+          outline: none;
+          border-color: #007bff;
+          box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        @media (max-width: 480px) {
+          padding: 10px;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  &-error {
+    background-color: #ffe6e6;
+    color: #dc3545;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    border: 1px solid #f5c6cb;
+    font-size: 14px;
+  }
+
+  &-submit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+
+    &:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+
+  &-links {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+
+    p {
+      margin: 5px 0;
+    }
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #0056b3;
+        text-decoration: underline;
+      }
+    }
+  }
+}

@@ -14,6 +14,7 @@ const auth = (req, res, next) => {
 
     // Ajouter les informations de l'utilisateur à la requête
     req.user = decoded;
+    req.userId = decoded.userId || decoded.id;
 
     next();
   } catch (err) {

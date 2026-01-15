@@ -1,11 +1,57 @@
 import { useState } from 'react';
+import SearchFilter from './SearchFilter';
+import '../styles/searchFilter.scss';
+import '../styles/ExpenseTable.scss';
 
 function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({});
+  const [filters, setFilters] = useState(null);
 
-  const fixedExpenses = expenses.filter(exp => exp.type === 'fixed');
-  const variableExpenses = expenses.filter(exp => exp.type === 'variable');
+  const applyFilters = (expenseList) => {
+    if (!filters) return expenseList;
+
+    return expenseList.filter(exp => {
+      // Recherche textuelle
+      if (filters.search && !exp.description.toLowerCase().includes(filters.search.toLowerCase())) {
+        return false;
+      }
+
+      // Filtre catégorie
+      if (filters.category && exp.category !== filters.category) {
+        return false;
+      }
+
+      // Filtre date
+      if (filters.dateFrom && new Date(exp.date) < new Date(filters.dateFrom)) {
+        return false;
+      }
+      if (filters.dateTo && new Date(exp.date) > new Date(filters.dateTo)) {
+        return false;
+      }
+
+      // Filtre montant
+      if (filters.minAmount && exp.amount < parseFloat(filters.minAmount)) {
+        return false;
+      }
+      if (filters.maxAmount && exp.amount > parseFloat(filters.maxAmount)) {
+        return false;
+      }
+
+      // Filtre tags
+      if (filters.tags && filters.tags.length > 0) {
+        if (!exp.tags || !filters.tags.some(tag => exp.tags.includes(tag))) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  };
+
+  const filteredExpenses = applyFilters(expenses);
+  const fixedExpenses = filteredExpenses.filter(exp => exp.type === 'fixed');
+  const variableExpenses = filteredExpenses.filter(exp => exp.type === 'variable');
 
   // Fonction pour calculer les détails des crédits
   const calculateCreditDetails = (credit) => {
@@ -106,7 +152,18 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
                   </>
                 ) : (
                   <>
-                    <td>{exp.description}</td>
+                    <td>
+                      {exp.description}
+                      {exp.tags && exp.tags.length > 0 && (
+                        <div className="expense-tags-container">
+                          {exp.tags.map((tag, i) => (
+                            <span key={i} className="expense-tag">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </td>
                     <td>{displayAmount}</td>
                     <td>{new Date(displayDate).toLocaleDateString('fr-FR')}</td>
                     <td>{exp.isRecurring ? 'Oui' : 'Non'}</td>
@@ -156,7 +213,7 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
                 <tr key={credit._id || index}>
                   <td>{credit.name}</td>
                   <td>{details.monthlyPayment.toFixed(2)} €</td>
-                  <td style={{ fontWeight: 'bold', color: '#dc3545' }}>{details.perPersonMonthly.toFixed(2)} €</td>
+                  <td className="expense-table-amount fixed">{details.perPersonMonthly.toFixed(2)} €</td>
                   <td>{details.monthsRemaining}</td>
                   <td>{new Date(credit.startDate).toLocaleDateString('fr-FR')}</td>
                 </tr>
@@ -171,6 +228,7 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
 
   return (
     <div>
+      <SearchFilter onFilterChange={setFilters} />
       {renderCreditTable()}
       {categories.map(cat => {
         const catExpenses = fixedExpenses.filter(exp => exp.category === cat);

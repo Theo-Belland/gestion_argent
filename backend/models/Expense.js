@@ -8,7 +8,8 @@ const expenseSchema = new mongoose.Schema({
   type: { type: String, enum: ['fixed', 'variable'], default: 'variable' },
   category: { type: String },
   isRecurring: { type: Boolean, default: false },
-  period: { type: String, default: 'monthly' }
+  period: { type: String, default: 'monthly' },
+  tags: { type: [String], default: [] }
 });
 
 module.exports = mongoose.model('Expense', expenseSchema);

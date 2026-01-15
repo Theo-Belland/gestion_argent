@@ -1,3 +1,5 @@
+import '../styles/SummaryBar.scss';
+
 function SummaryBar({ incomes, expenses, savings = [] }) {
   const totalIncome = incomes.reduce((sum, inc) => sum + (inc.amount || 0), 0);
   const totalFixed = expenses.filter(exp => exp.type === 'fixed').reduce((sum, exp) => sum + (exp.amount || 0), 0);
@@ -22,51 +24,30 @@ function SummaryBar({ incomes, expenses, savings = [] }) {
   };
 
   return (
-    <div style={{
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      padding: '20px',
-      marginBottom: '20px',
-      borderRadius: '10px',
-      boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-      display: 'flex',
-      justifyContent: 'space-around',
-      flexWrap: 'wrap',
-      gap: '20px'
-    }}>
-      <div style={{ textAlign: 'center', flex: '1', minWidth: '150px' }}>
-        <h3 style={{ margin: '0', fontSize: '1.2em' }}>💰 Revenus</h3>
-        <p style={{ fontSize: '1.5em', fontWeight: 'bold', margin: '5px 0' }}>{formatCurrency(totalIncome)}</p>
+    <div className="summary-bar">
+      <div className="summary-card positive">
+        <h3>💰 Revenus</h3>
+        <p>{formatCurrency(totalIncome)}</p>
       </div>
-      <div style={{ textAlign: 'center', flex: '1', minWidth: '150px' }}>
-        <h3 style={{ margin: '0', fontSize: '1.2em' }}>🏠 Fixes</h3>
-        <p style={{ fontSize: '1.5em', fontWeight: 'bold', margin: '5px 0' }}>{formatCurrency(totalFixed)}</p>
+      <div className="summary-card negative">
+        <h3>🏠 Fixes</h3>
+        <p>{formatCurrency(totalFixed)}</p>
       </div>
-      <div style={{ textAlign: 'center', flex: '1', minWidth: '150px' }}>
-        <h3 style={{ margin: '0', fontSize: '1.2em' }}>🛒 Variables</h3>
-        <p style={{ fontSize: '1.5em', fontWeight: 'bold', margin: '5px 0' }}>{formatCurrency(totalVariable)}</p>
+      <div className="summary-card negative">
+        <h3>🛒 Variables</h3>
+        <p>{formatCurrency(totalVariable)}</p>
       </div>
-      <div style={{ textAlign: 'center', flex: '1', minWidth: '150px' }}>
-        <h3 style={{ margin: '0', fontSize: '1.2em' }}>💰 Épargnes</h3>
-        <p style={{ fontSize: '1.5em', fontWeight: 'bold', margin: '5px 0', color: '#2196F3' }}>{formatCurrency(totalSavings)}</p>
+      <div className="summary-card savings">
+        <h3>💰 Épargnes</h3>
+        <p>{formatCurrency(totalSavings)}</p>
       </div>
-      <div style={{ textAlign: 'center', flex: '1', minWidth: '150px' }}>
-        <h3 style={{ margin: '0', fontSize: '1.2em' }}>💸 Solde Restant</h3>
-        <p style={{
-          fontSize: '1.5em',
-          fontWeight: 'bold',
-          margin: '5px 0',
-          color: savingsAfterExpenses >= 0 ? '#4CAF50' : '#F44336'
-        }}>{formatCurrency(savingsAfterExpenses)}</p>
+      <div className="summary-card">
+        <h3>💸 Solde Restant</h3>
+        <p className={`summary-card-value ${savingsAfterExpenses >= 0 ? 'positive' : 'negative'}`}>{formatCurrency(savingsAfterExpenses)}</p>
       </div>
-      <div style={{ textAlign: 'center', flex: '1', minWidth: '150px' }}>
-        <h3 style={{ margin: '0', fontSize: '1.2em' }}>📊 Reste à Vivre</h3>
-        <p style={{
-          fontSize: '1.5em',
-          fontWeight: 'bold',
-          margin: '5px 0',
-          color: remainingToLive >= 0 ? '#2196F3' : '#FF9800'
-        }}>{formatCurrency(remainingToLive)}</p>
+      <div className="summary-card">
+        <h3>📊 Reste à Vivre</h3>
+        <p className={`summary-card-value ${remainingToLive >= 0 ? 'neutral' : 'negative'}`}>{formatCurrency(remainingToLive)}</p>
       </div>
     </div>
   );

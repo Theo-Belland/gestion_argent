@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import '../styles/Login.scss';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -51,33 +52,16 @@ function Login() {
   };
 
   return (
-    <div style={{
-      maxWidth: '400px',
-      margin: '50px auto',
-      padding: '20px',
-      border: '1px solid #ddd',
-      borderRadius: '8px',
-      backgroundColor: '#f9f9f9'
-    }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Connexion</h2>
+    <div className="login-container">
+      <div className="login-header">
+        <h2>Connexion</h2>
+      </div>
 
-      {error && (
-        <div style={{
-          color: 'red',
-          backgroundColor: '#ffe6e6',
-          padding: '10px',
-          borderRadius: '4px',
-          marginBottom: '15px'
-        }}>
-          {error}
-        </div>
-      )}
+      {error && <div className="login-error">{error}</div>}
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="email" style={{ display: 'block', marginBottom: '5px' }}>
-            Email:
-          </label>
+      <form onSubmit={handleSubmit} className="login-form">
+        <div className="login-form-group">
+          <label htmlFor="email">Email:</label>
           <input
             type="email"
             id="email"
@@ -85,20 +69,11 @@ function Login() {
             value={formData.email}
             onChange={handleChange}
             required
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              fontSize: '16px'
-            }}
           />
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="password" style={{ display: 'block', marginBottom: '5px' }}>
-            Mot de passe:
-          </label>
+        <div className="login-form-group">
+          <label htmlFor="password">Mot de passe:</label>
           <input
             type="password"
             id="password"
@@ -106,36 +81,17 @@ function Login() {
             value={formData.password}
             onChange={handleChange}
             required
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              fontSize: '16px'
-            }}
           />
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '10px',
-            backgroundColor: loading ? '#ccc' : '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            fontSize: '16px',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
-        >
+        <button type="submit" disabled={loading} className="login-submit">
           {loading ? 'Connexion...' : 'Se connecter'}
         </button>
       </form>
 
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <div className="login-links">
         <p>Pas encore de compte ? <Link to="/register">S'inscrire</Link></p>
+        <p><Link to="/forgot-password">Mot de passe oublié ?</Link></p>
         <p><Link to="/">Retour à l'accueil</Link></p>
       </div>
     </div>
