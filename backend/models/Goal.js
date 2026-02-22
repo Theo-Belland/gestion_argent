@@ -10,7 +10,10 @@ const goalSchema = new mongoose.Schema({
   category: { type: String, default: 'Épargne' },
   description: { type: String },
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: { type: Date, default: Date.now },
+  mailSent50: { type: Boolean, default: false },
+  mailSent80: { type: Boolean, default: false },
+  mailSent100: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model('Goal', goalSchema);

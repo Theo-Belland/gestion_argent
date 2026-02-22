@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/userProfile.scss';
 
-const API_BASE = 'http://localhost:5000/api';
+ const API_BASE = import.meta.env.VITE_API_BASE || 'https://api.geretonbudget.theobelland.fr/api';
+
 
 function UserProfile() {
   const navigate = useNavigate();
@@ -315,6 +316,7 @@ function UserProfile() {
                 </select>
               </div>
 
+
               <div className="form-group-checkbox">
                 <label>
                   <input
@@ -322,7 +324,18 @@ function UserProfile() {
                     checked={preferences.notifications}
                     onChange={(e) => setPreferences({ ...preferences, notifications: e.target.checked })}
                   />
-                  Recevoir des notifications
+                  Recevoir des notifications générales
+                </label>
+              </div>
+
+              <div className="form-group-checkbox">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={preferences.goalMails ?? true}
+                    onChange={(e) => setPreferences({ ...preferences, goalMails: e.target.checked })}
+                  />
+                  Recevoir des mails de progression d'objectif (50%, 80%, 100%)
                 </label>
               </div>
 

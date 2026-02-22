@@ -1,3 +1,24 @@
+// Actions d'édition (Valider/Annuler) sur la même ligne
+.credit-edit-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 10px !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-start;
+}
+
+// Affichage en ligne des boutons de détails crédit
+.credit-bt {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 10px;
+  flex-wrap: nowrap !important;
+  width: auto !important;
+}
+
 .credit {
   &-table-container {
     background-color: #f9f9f9;
@@ -7,73 +28,16 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     flex: 1;
     min-width: 300px;
-
-    @media (max-width: 768px) {
-      padding: 15px;
-    }
   }
 
-  &-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-
-    thead {
-      background-color: #ffe6e6;
-      border-bottom: 2px solid #dc3545;
-
-      th {
-        padding: 10px;
-        text-align: left;
-        font-weight: bold;
-        color: #333;
-        font-size: 14px;
-
-        @media (max-width: 768px) {
-          padding: 8px 5px;
-        }
-      }
-    }
-
-    tbody {
-      tr {
-        background-color: #fff5f5;
-
-        &:hover {
-          background-color: #fff0f0;
-        }
-      }
-
-      td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        font-size: 14px;
-        color: #333;
-
-        @media (max-width: 768px) {
-          padding: 8px 5px;
-        }
-      }
-    }
-
-    .small-text {
-      color: #666;
-      font-size: 12px;
-    }
+  &-actions {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
 
     @media (max-width: 768px) {
-      font-size: 12px;
-    }
-
-    &-actions {
-      display: flex;
-      gap: 5px;
-      flex-wrap: wrap;
-
-      @media (max-width: 768px) {
-        flex-direction: column;
-        width: 100%;
-      }
+      flex-direction: column;
+      width: 100%;
     }
   }
 
@@ -87,10 +51,7 @@
     font-size: 12px;
     font-weight: bold;
     transition: all 0.3s ease;
-
-    @media (max-width: 768px) {
-      width: 100%;
-    }
+    // Suppression du width: 100% sur mobile pour garder les boutons sur la même ligne
   }
 
   &-edit-btn {
@@ -121,7 +82,6 @@
   }
 
   &-modal-input {
-    width: 100%;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;

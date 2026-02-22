@@ -1,7 +1,53 @@
 import { useState } from 'react';
+// Modal simple pour afficher les détails crédit
+function CreditDetailsModal({ open, onClose, credit, details }) {
+  if (!open) return null;
+  // Format date sans l'heure
+  let dateStr = credit.startDate;
+  if (dateStr && dateStr.includes('T')) dateStr = dateStr.split('T')[0];
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(0,0,0,0.4)',
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{ background: '#fff', borderRadius: 8, padding: 24, minWidth: 320, maxWidth: 400, boxShadow: '0 2px 16px #0002', position: 'relative' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <button onClick={onClose} style={{ position: 'absolute', top: 8, right: 8, background: 'none', border: 'none', fontSize: 22, cursor: 'pointer' }}>×</button>
+        <h3>Détail du crédit : {credit.name}</h3>
+        <div className="credit-details-card">
+          <div className="credit-details-card"><strong>Mensualité estimée:</strong><br />{typeof details.monthlyPayment === 'number' ? details.monthlyPayment.toFixed(2) : '0.00'} €<br /><small className="small-text">(calcul théorique)</small></div>
+          <div className="credit-details-card"><strong>Mensualité par personne:</strong><br />{typeof details.perPersonMonthly === 'number' ? details.perPersonMonthly.toFixed(2) : '0.00'} €<br /><small className="small-text">(calcul théorique)</small></div>
+          <div className="credit-details-card"><strong>Mois écoulés:</strong><br />{details.monthsElapsed}</div>
+          <div className="credit-details-card"><strong>Mois restants:</strong><br />{details.monthsRemaining}</div>
+          <div className="credit-details-card"><strong>Intérêts payés:</strong><br />{typeof details.totalInterestPaid === 'number' ? details.totalInterestPaid.toFixed(2) : '0.00'} €</div>
+          <div className="credit-details-card"><strong>Montant restant actuel:</strong><br />{typeof details.remainingAmount === 'number' ? details.remainingAmount.toFixed(2) : '0.00'} €</div>
+          <div className="credit-details-card"><strong>Part par personne:</strong><br />{typeof details.perPersonRemaining === 'number' ? details.perPersonRemaining.toFixed(2) : '0.00'} €</div>
+          <div className="credit-details-card"><strong>Informations:</strong><br />Début: {dateStr}<br />Durée: {credit.durationMonths} mois<br />Taux: {credit.interestRate}%</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 import '../styles/CreditTable.scss';
 
 function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBalance }) {
+  // DEBUG : log crédits reçus
+  if (typeof window !== 'undefined') {
+    console.log('DEBUG credits reçus dans CreditTable:', credits);
+  }
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
   const [updateBalance, setUpdateBalance] = useState({});
@@ -154,14 +200,17 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
             return (
               <tr key={credit._id}>
                 <td>{credit.name}</td>
-                <td>{credit.amount.toFixed(2)} €</td>
-                <td>{credit.interestRate.toFixed(2)}%</td>
+                <td>{typeof credit.amount === 'number' ? credit.amount.toFixed(2) : '0.00'} €</td>
+                <td>{typeof credit.interestRate === 'number' ? credit.interestRate.toFixed(2) : '0.00'}%</td>
                 <td>
                   {details.monthsRemaining}
+                  {details.monthsRemaining === 1 && (
+                    <span style={{ color: 'red', fontWeight: 'bold', marginLeft: 8 }}>Dernier mois !</span>
+                  )}
                 </td>
                 <td>
                   <div>
-                    <div>{details.remainingAmount.toFixed(2)} €</div>
+                    <div>{typeof details.remainingAmount === 'number' ? details.remainingAmount.toFixed(2) : '0.00'} €</div>
                     <div className="credit-table-actions">
                       <input
                         type="number"
@@ -182,12 +231,14 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
                   {details.perPersonRemaining.toFixed(2)} €
                 </td>
                 <td>
-                  <button onClick={() => handleEdit(credit)} className="credit-edit-btn">
-                    Modifier
-                  </button>
-                  <button onClick={() => onDeleteCredit(credit._id)} className="credit-delete-btn">
-                    Supprimer
-                  </button>
+                  <div className="credit-table-actions">
+                    <button onClick={() => handleEdit(credit)} className="credit-edit-btn">
+                      Modifier
+                    </button>
+                    <button onClick={() => onDeleteCredit(credit._id)} className="credit-delete-btn">
+                      Supprimer
+                    </button>
+                  </div>
                 </td>
               </tr>
             );
@@ -200,62 +251,29 @@ function CreditTable({ credits, onDeleteCredit, onEditCredit, onUpdateCreditBala
           💡 <strong>Conseil :</strong> Pour que les montants correspondent exactement à votre relevé bancaire,
           utilisez le champ "Nouveau montant" dans le tableau pour saisir le montant restant indiqué par votre banque.
         </p>
-        {credits.map((credit) => {
-          const details = calculateCreditDetails(credit);
-          return (
-            <div key={credit._id}>
-              <button
-                onClick={() => setShowDetails(showDetails === credit._id ? null : credit._id)}
-                className="credit-edit-btn"
-              >
-                {credit.name} {showDetails === credit._id ? '▲' : '▼'}
-              </button>
-
-              {showDetails === credit._id && (
-                <div className="credit-details-card">
-                  <div>
-                    <div className="credit-details-card">
-                      <strong>Mensualité estimée:</strong><br />
-                      {details.monthlyPayment.toFixed(2)} €
-                      <br /><small className="small-text">(calcul théorique)</small>
-                    </div>
-                    <div className="credit-details-card">
-                      <strong>Mensualité par personne:</strong><br />
-                      {details.perPersonMonthly.toFixed(2)} €
-                      <br /><small className="small-text">(calcul théorique)</small>
-                    </div>
-                    <div className="credit-details-card">
-                      <strong>Mois écoulés:</strong><br />
-                      {details.monthsElapsed}
-                    </div>
-                    <div className="credit-details-card">
-                      <strong>Mois restants:</strong><br />
-                      {details.monthsRemaining}
-                    </div>
-                    <div className="credit-details-card">
-                      <strong>Intérêts payés:</strong><br />
-                      {details.totalInterestPaid.toFixed(2)} €
-                    </div>
-                    <div className="credit-details-card">
-                      <strong>Montant restant actuel:</strong><br />
-                      {details.remainingAmount.toFixed(2)} €
-                    </div>
-                    <div className="credit-details-card">
-                      <strong>Part par personne:</strong><br />
-                      {details.perPersonRemaining.toFixed(2)} €
-                    </div>
-                    <div className="credit-details-card">
-                      <strong>Informations:</strong><br />
-                      Début: {credit.startDate}<br />
-                      Durée: {credit.durationMonths} mois<br />
-                      Taux: {credit.interestRate}%
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
+        <div className="credit-bt" style={{ flexWrap: 'wrap' }}>
+          {credits.map((credit) => {
+            const details = calculateCreditDetails(credit);
+            return (
+              <span key={credit._id} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '16px', marginBottom: '8px' }}>
+                <span>{credit.name}</span>
+                <button
+                  onClick={() => setShowDetails(showDetails === credit._id ? null : credit._id)}
+                  className="credit-edit-btn"
+                  style={{ minWidth: 32 }}
+                >
+                  Détail
+                </button>
+                <CreditDetailsModal
+                  open={showDetails === credit._id}
+                  onClose={() => setShowDetails(null)}
+                  credit={credit}
+                  details={details}
+                />
+              </span>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

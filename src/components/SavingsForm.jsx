@@ -17,7 +17,6 @@ function SavingsForm({ onAddSavings }) {
     }
 
     const newSavings = {
-      id: Date.now(),
       name,
       amount: parseFloat(amount),
       interestRate: parseFloat(interestRate),

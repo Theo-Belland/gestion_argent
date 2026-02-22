@@ -7,36 +7,19 @@ function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({});
   const [filters, setFilters] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   const applyFilters = (incomeList) => {
     if (!filters) return incomeList;
-
     return incomeList.filter(inc => {
-      if (filters.search && !inc.description.toLowerCase().includes(filters.search.toLowerCase())) {
-        return false;
-      }
-
-      if (filters.dateFrom && new Date(inc.date) < new Date(filters.dateFrom)) {
-        return false;
-      }
-      if (filters.dateTo && new Date(inc.date) > new Date(filters.dateTo)) {
-        return false;
-      }
-
-      if (filters.minAmount && inc.amount < parseFloat(filters.minAmount)) {
-        return false;
-      }
-      if (filters.maxAmount && inc.amount > parseFloat(filters.maxAmount)) {
-        return false;
-      }
-
-      // Filtre tags
+      if (filters.search && !inc.description.toLowerCase().includes(filters.search.toLowerCase())) return false;
+      if (filters.dateFrom && new Date(inc.date) < new Date(filters.dateFrom)) return false;
+      if (filters.dateTo && new Date(inc.date) > new Date(filters.dateTo)) return false;
+      if (filters.minAmount && inc.amount < parseFloat(filters.minAmount)) return false;
+      if (filters.maxAmount && inc.amount > parseFloat(filters.maxAmount)) return false;
       if (filters.tags && filters.tags.length > 0) {
-        if (!inc.tags || !filters.tags.some(tag => inc.tags.includes(tag))) {
-          return false;
-        }
+        if (!inc.tags || !filters.tags.some(tag => inc.tags.includes(tag))) return false;
       }
-
       return true;
     });
   };
@@ -59,8 +42,19 @@ function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
   };
 
   return (
-    <div className="income-table-container">
-      <SearchFilter onFilterChange={setFilters} />
+    <div className="income-table-container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <button
+        className="income-table-toggle-filter"
+        onClick={() => setShowFilters((v) => !v)}
+        style={{ marginBottom: 10, marginTop: 5, padding: '6px 14px', borderRadius: 6, border: '1px solid #bbb', background: '#f8f9fa', cursor: 'pointer', fontWeight: 500 }}
+      >
+        {showFilters ? 'Masquer la recherche ▲' : 'Afficher la recherche ▼'}
+      </button>
+      {showFilters && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
+          <SearchFilter onFilterChange={setFilters} />
+        </div>
+      )}
       <h3>Revenus</h3>
       <table className="income-table">
         <thead>
@@ -92,7 +86,6 @@ function IncomeTable({ incomes, onDeleteIncome, onEditIncome }) {
                         ))}
                       </div>
                     )}
-                  
                     <button onClick={saveEdit}>Sauvegarder</button>
                     <button onClick={cancelEdit}>Annuler</button>
                   </td>

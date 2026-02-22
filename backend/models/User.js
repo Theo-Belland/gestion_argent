@@ -22,11 +22,20 @@ const userSchema = new mongoose.Schema({
     currency: { type: String, default: 'EUR' },
     language: { type: String, default: 'fr' },
     notifications: { type: Boolean, default: true },
-    theme: { type: String, default: 'light' }
+    theme: { type: String, default: 'light' },
+    goalMails: { type: Boolean, default: true }
   },
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  resetPasswordToken: {
+    type: String,
+    default: null
+  },
+  resetPasswordExpires: {
+    type: Date,
+    default: null
   }
 });
 

@@ -2,14 +2,15 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/passwordReset.scss';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE =
+  import.meta.env.VITE_API_BASE ||
+  'https://api.geretonbudget.theobelland.fr/api';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [devToken, setDevToken] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,21 +19,18 @@ function ForgotPassword() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE}/password-reset/request-reset`, {
+      const res = await fetch(`${API_BASE}/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
 
       const data = await res.json();
-      
+
       if (res.ok) {
         setMessage(data.message);
-        if (data.devToken) {
-          setDevToken(data.devToken);
-        }
       } else {
-        setError(data.error || 'Une erreur est survenue');
+        setError(data.message || 'Une erreur est survenue');
       }
     } catch (err) {
       console.error('Erreur:', err);
@@ -45,9 +43,9 @@ function ForgotPassword() {
   return (
     <div className="password-reset-container">
       <div className="password-reset-card">
-        <h2>🔑 Mot de passe oublié?</h2>
+        <h2>🔑 Mot de passe oublié ?</h2>
         <p>Entrez votre adresse email pour recevoir un lien de réinitialisation.</p>
-        
+
         <form onSubmit={handleSubmit}>
           <input
             type="email"
@@ -56,26 +54,13 @@ function ForgotPassword() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          
+
           <button type="submit" disabled={loading}>
-            {loading ? 'Envoi...' : 'Envoyer le lien'}
+            {loading ? 'Envoi…' : 'Envoyer le lien'}
           </button>
         </form>
 
-        {message && (
-          <div className="success-message">
-            {message}
-            {devToken && (
-              <div className="dev-token">
-                <p><strong>Mode développement:</strong></p>
-                <Link to={`/reset-password/${devToken}`} className="dev-link">
-                  Cliquez ici pour réinitialiser
-                </Link>
-              </div>
-            )}
-          </div>
-        )}
-
+        {message && <div className="success-message">{message}</div>}
         {error && <div className="error-message">{error}</div>}
 
         <div className="back-to-login">

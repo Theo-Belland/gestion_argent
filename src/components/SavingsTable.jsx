@@ -101,7 +101,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
 
             if (isEditing) {
               return (
-                <tr key={savingsItem._id} className="savings-edit-row">
+                <tr key={`edit-row-${savingsItem._id}`} className="savings-edit-row">
                   <td className="savings-edit-cell">
                     <input
                       type="text"
@@ -160,30 +160,30 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
             }
 
             return (
-              <tr key={savingsItem._id}>
+              <tr key={`row-${savingsItem._id}`}>
                 <td>{savingsItem.name}</td>
-                <td className="savings-table-align-right">{savingsItem.amount.toFixed(2)} €</td>
-                <td className="savings-table-align-right">{savingsItem.interestRate.toFixed(2)}%</td>
+                <td className="savings-table-align-right">{typeof savingsItem.amount === 'number' && !isNaN(savingsItem.amount) ? savingsItem.amount.toFixed(2) : '0.00'} €</td>
+                <td className="savings-table-align-right">{typeof savingsItem.interestRate === 'number' && !isNaN(savingsItem.interestRate) ? savingsItem.interestRate.toFixed(2) : '0.00'}%</td>
                 <td className="savings-table-align-center">
                   {savingsItem.frequency === 'monthly' ? 'Mensuel' : 'Annuel'}
                 </td>
                 <td className="savings-date-cell">
-                  {new Date(savingsItem.startDate).toLocaleDateString('fr-FR')}
+                  {savingsItem.startDate ? (new Date(savingsItem.startDate).toLocaleDateString('fr-FR') !== 'Invalid Date' ? new Date(savingsItem.startDate).toLocaleDateString('fr-FR') : '—') : '—'}
                 </td>
                 <td 
                   className="savings-interest savings-tooltip-container"
                   onMouseEnter={() => setShowDetails(savingsItem._id)}
                   onMouseLeave={() => setShowDetails(null)}
                 >
-                  +{interest.toFixed(2)} €
+                  {typeof interest === 'number' && !isNaN(interest) ? `+${interest.toFixed(2)} €` : '+0.00 €'}
                   {showDetails === savingsItem._id && (
                     <div className="savings-tooltip">
-                      {Math.floor(days)} jours • {new Date(savingsItem.startDate).toLocaleDateString('fr-FR')}
+                      {typeof days === 'number' && !isNaN(days) ? Math.floor(days) : '—'} jours • {savingsItem.startDate ? (new Date(savingsItem.startDate).toLocaleDateString('fr-FR') !== 'Invalid Date' ? new Date(savingsItem.startDate).toLocaleDateString('fr-FR') : '—') : '—'}
                     </div>
                   )}
                 </td>
                 <td className="savings-total">
-                  {total.toFixed(2)} €
+                  {typeof total === 'number' && !isNaN(total) ? `${total.toFixed(2)} €` : '0.00 €'}
                 </td>
                 <td className="savings-table-align-center">
                   <button
@@ -208,7 +208,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
       <div className="savings-add-section">
         <h3 className="savings-add-section-title">Ajouter ou Retirer des Montants</h3>
         {savings.map((savingsItem) => (
-          <div key={savingsItem._id} className="savings-add-item">
+          <div key={`add-item-${savingsItem._id}`} className="savings-add-item">
             <button
               onClick={() => setModalOpen(modalOpen === savingsItem._id ? null : savingsItem._id)}
               className="savings-toggle-button"
@@ -217,8 +217,8 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
             </button>
 
             {modalOpen === savingsItem._id && (
-              <div className="savings-accordion-content">
-                <div className="savings-modal-field">
+              <div className="savings-accordion-content" key={`accordion-${savingsItem._id}`}> 
+                <div className="savings-modal-field" key={`add-${savingsItem._id}`}> 
                   <label className="savings-modal-label">
                     Ajouter un montant:
                   </label>
@@ -241,7 +241,7 @@ function SavingsTable({ savings, onDeleteSavings, onAddToSavings, onWithdrawSavi
                   </div>
                 </div>
 
-                <div>
+                <div key={`remove-${savingsItem._id}`}> 
                   <label className="savings-modal-label">
                     Retirer un montant:
                   </label>

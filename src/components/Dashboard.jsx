@@ -6,7 +6,7 @@ function Dashboard({ incomes, expenses, savings, goals, budgets }) {
   const totalIncome = incomes.reduce((sum, inc) => sum + inc.amount, 0);
   const totalExpense = expenses.reduce((sum, exp) => sum + exp.amount, 0);
   const balance = totalIncome - totalExpense;
-  const totalSavings = savings.reduce((sum, sav) => sum + sav.currentAmount, 0);
+  const totalSavings = savings.reduce((sum, sav) => sum + (typeof sav.amount === 'number' && isFinite(sav.amount) ? sav.amount : 0), 0);
 
   // Objectifs proches de completion
   const nearCompleteGoals = goals
@@ -38,7 +38,7 @@ function Dashboard({ incomes, expenses, savings, goals, budgets }) {
           <div className="stat-icon">💰</div>
           <div className="stat-content">
             <h3>Revenus totaux</h3>
-            <p className="stat-value">{totalIncome.toFixed(2)} €</p>
+            <p className="stat-value">{typeof totalIncome === 'number' ? totalIncome.toFixed(2) : '0.00'} €</p>
             <Link to="/app/transactions" className="stat-link">Voir détails →</Link>
           </div>
         </div>
@@ -47,7 +47,7 @@ function Dashboard({ incomes, expenses, savings, goals, budgets }) {
           <div className="stat-icon">💸</div>
           <div className="stat-content">
             <h3>Dépenses totales</h3>
-            <p className="stat-value">{totalExpense.toFixed(2)} €</p>
+            <p className="stat-value">{typeof totalExpense === 'number' ? totalExpense.toFixed(2) : '0.00'} €</p>
             <Link to="/app/transactions" className="stat-link">Voir détails →</Link>
           </div>
         </div>
@@ -56,7 +56,7 @@ function Dashboard({ incomes, expenses, savings, goals, budgets }) {
           <div className="stat-icon">{balance >= 0 ? '✅' : '⚠️'}</div>
           <div className="stat-content">
             <h3>Solde</h3>
-            <p className="stat-value">{balance.toFixed(2)} €</p>
+            <p className="stat-value">{typeof balance === 'number' ? balance.toFixed(2) : '0.00'} €</p>
           </div>
         </div>
 
@@ -64,7 +64,7 @@ function Dashboard({ incomes, expenses, savings, goals, budgets }) {
           <div className="stat-icon">🏦</div>
           <div className="stat-content">
             <h3>Épargne totale</h3>
-            <p className="stat-value">{totalSavings.toFixed(2)} €</p>
+            <p className="stat-value">{typeof totalSavings === 'number' ? totalSavings.toFixed(2) : '0.00'} €</p>
             <Link to="/app/epargnes" className="stat-link">Gérer →</Link>
           </div>
         </div>
@@ -122,7 +122,7 @@ function Dashboard({ incomes, expenses, savings, goals, budgets }) {
               recentExpenses.map(exp => (
                 <div key={exp._id} className="widget-item">
                   <span className="widget-item-name">{exp.description}</span>
-                  <span className="widget-item-value expense-value">{exp.amount.toFixed(2)} €</span>
+                  <span className="widget-item-value expense-value">{typeof exp.amount === 'number' ? exp.amount.toFixed(2) : '0.00'} €</span>
                 </div>
               ))
             )}
@@ -139,7 +139,7 @@ function Dashboard({ incomes, expenses, savings, goals, budgets }) {
               recentIncomes.map(inc => (
                 <div key={inc._id} className="widget-item">
                   <span className="widget-item-name">{inc.description}</span>
-                  <span className="widget-item-value income-value">{inc.amount.toFixed(2)} €</span>
+                  <span className="widget-item-value income-value">{typeof inc.amount === 'number' ? inc.amount.toFixed(2) : '0.00'} €</span>
                 </div>
               ))
             )}

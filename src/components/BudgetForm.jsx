@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../styles/BudgetForm.scss';
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://api.geretonbudget.theobelland.fr/api';
 
-const API_BASE = 'http://localhost:5000/api';
 
 function BudgetForm({ onBudgetAdded }) {
   const [budget, setBudget] = useState({

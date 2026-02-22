@@ -93,11 +93,11 @@ function MonthlyReport({ incomes, expenses }) {
       </label>
 
       <h4>Mois Sélectionné</h4>
-      <p>Revenus Réels: {currentTotals.actualIncome} €</p>
-      <p>Dépenses Réelles: {currentTotals.actualExpense} €</p>
-      <p>Revenus Projetés: {currentTotals.projectedIncome} €</p>
-      <p>Dépenses Projetées: {currentTotals.projectedExpense} €</p>
-      <p>Solde Projeté: {currentTotals.balance} €</p>
+      <p>Revenus Réels: {currentTotals.actualIncome.toFixed(2)} €</p>
+      <p>Dépenses Réelles: {currentTotals.actualExpense.toFixed(2)} €</p>
+      <p>Revenus Projetés: {currentTotals.projectedIncome.toFixed(2)} €</p>
+      <p>Dépenses Projetées: {currentTotals.projectedExpense.toFixed(2)} €</p>
+      <p>Solde Projeté: {currentTotals.balance.toFixed(2)} €</p>
 
       <h4>Historique (12 derniers mois)</h4>
       <table>
@@ -113,9 +113,9 @@ function MonthlyReport({ incomes, expenses }) {
           {history.map((h, index) => (
             <tr key={index}>
               <td>{h.month}/{h.year}</td>
-              <td>{h.actualIncome} €</td>
-              <td>{h.actualExpense} €</td>
-              <td>{h.balance} €</td>
+              <td>{h.actualIncome.toFixed(2)} €</td>
+              <td>{h.actualExpense.toFixed(2)} €</td>
+              <td>{h.balance.toFixed(2)} €</td>
             </tr>
           ))}
         </tbody>
@@ -135,9 +135,9 @@ function MonthlyReport({ incomes, expenses }) {
           {forecast.map((f, index) => (
             <tr key={index}>
               <td>{f.month}/{f.year}</td>
-              <td>{f.projectedIncome} €</td>
-              <td>{f.projectedExpense} €</td>
-              <td>{f.balance} €</td>
+              <td>{f.projectedIncome.toFixed(2)} €</td>
+              <td>{f.projectedExpense.toFixed(2)} €</td>
+              <td>{f.balance.toFixed(2)} €</td>
             </tr>
           ))}
         </tbody>

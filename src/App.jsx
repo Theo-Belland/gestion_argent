@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import Login from './components/Login';
@@ -18,20 +19,20 @@ function App() {
   return (
     <NotificationProvider>
       <Router>
-        <ThemeToggle />
+        {/* <ThemeToggle /> */}
         <Navbar />
-        <SessionTimeout />
+        {/* <SessionTimeout /> */}
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/app/*" element={<AppContent />} />
         </Routes>
-        <CookieConsent />
+        {/* <CookieConsent /> */}
       </Router>
     </NotificationProvider>
   );

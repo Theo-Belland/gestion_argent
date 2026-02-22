@@ -19,11 +19,17 @@ import ExportButtons from './components/ExportButtons';
 import ImportCSV from './components/ImportCSV';
 import UserProfile from './components/UserProfile';
 import Dashboard from './components/Dashboard';
+
+import AppSection from './components/AppSection';
 import './styles/AppContent.scss';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://api.geretonbudget.theobelland.fr/api';
 
 function AppContent() {
+  // Ajout du state pour le mois et l'année sélectionnés
+  const today = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1); // 1-12
+  const [selectedYear, setSelectedYear] = useState(today.getFullYear());
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [savings, setSavings] = useState([]);
@@ -40,7 +46,7 @@ function AppContent() {
     const userData = localStorage.getItem('user');
 
     // Enregistrer une visite côté backend
-    fetch('http://localhost:5000/api/metrics/visit', {
+    fetch(`${API_BASE}/metrics/visit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ path: '/app', user: userData ? JSON.parse(userData).email : undefined })
@@ -432,93 +438,182 @@ function AppContent() {
     return null; // Sera redirigé vers login
   }
 
+  // Helpers pour filtrer par mois/année
+  function isSameMonthYear(dateStr, month, year) {
+    const d = new Date(dateStr);
+    return d.getMonth() + 1 === month && d.getFullYear() === year;
+  }
+  const filteredIncomes = incomes.filter(inc => isSameMonthYear(inc.date, selectedMonth, selectedYear));
+  // Les dépenses fixes récurrentes doivent apparaître chaque mois
+  const filteredExpenses = expenses.filter(exp => {
+    if (exp.type === 'fixed' && exp.isRecurring) {
+      // Affiche la dépense fixe pour tous les mois après sa date d'origine
+      const d = new Date(exp.date);
+      return (selectedYear > d.getFullYear()) ||
+             (selectedYear === d.getFullYear() && selectedMonth >= d.getMonth() + 1);
+    }
+    // Les autres dépenses sont filtrées normalement
+    return isSameMonthYear(exp.date, selectedMonth, selectedYear);
+  });
+  // Les épargnes récurrentes (frequency: 'monthly') doivent apparaître chaque mois à partir de startDate
+  const filteredSavings = savings.filter(sav => {
+    if (sav.frequency === 'monthly' && sav.startDate) {
+      const d = new Date(sav.startDate);
+      return (selectedYear > d.getFullYear()) ||
+             (selectedYear === d.getFullYear() && selectedMonth >= d.getMonth() + 1);
+    }
+    return isSameMonthYear(sav.date, selectedMonth, selectedYear);
+  });
+
+  // DEBUG : log savings filtrés et tous les savings
+  if (typeof window !== 'undefined') {
+    console.log('DEBUG filteredSavings:', filteredSavings);
+    console.log('DEBUG all savings:', savings);
+  }
+  // Afficher tous les crédits actifs chaque mois (à partir de startDate, tant que la durée n'est pas terminée)
+  const filteredCredits = credits.filter(cred => {
+    if (cred.startDate && cred.durationMonths) {
+      const start = new Date(cred.startDate);
+      const endMonth = start.getMonth() + cred.durationMonths;
+      const endYear = start.getFullYear() + Math.floor(endMonth / 12);
+      const endMonthNorm = endMonth % 12 || 12;
+      // Le crédit est actif si le mois sélectionné est entre startDate et la fin
+      const afterStart = (selectedYear > start.getFullYear()) || (selectedYear === start.getFullYear() && selectedMonth >= start.getMonth() + 1);
+      const beforeEnd = (selectedYear < endYear) || (selectedYear === endYear && selectedMonth <= endMonthNorm);
+      return afterStart && beforeEnd;
+    }
+    return true;
+  });
+  const filteredBudgets = budgets.filter(bud => isSameMonthYear(bud.date, selectedMonth, selectedYear));
+
+  // DEBUG : log savings juste avant le rendu
+  if (typeof window !== 'undefined') {
+    window.__DEBUG_SAVINGS_APP = savings;
+    console.log('DEBUG savings array in AppContent:', savings);
+    if (savings && savings.length > 0) {
+      console.log('DEBUG first savings object:', savings[0]);
+      Object.entries(savings[0]).forEach(([key, value]) => {
+        console.log(`  ${key}:`, value, '| type:', typeof value);
+      });
+    }
+  }
   return (
     <div className="app-content-container">
+      {/* Sélecteur de mois/année */}
+      <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 16 }}>
+        <label>Mois :
+          <select value={selectedMonth} onChange={e => setSelectedMonth(Number(e.target.value))}>
+            {[...Array(12)].map((_, i) => (
+              <option key={i+1} value={i+1}>{(i+1).toString().padStart(2, '0')}</option>
+            ))}
+          </select>
+        </label>
+        <label>Année :
+          <input type="number" value={selectedYear} onChange={e => setSelectedYear(Number(e.target.value))} style={{ width: 80 }} />
+        </label>
+      </div>
 
 
       <Routes>
-        <Route index element={<Dashboard incomes={incomes} expenses={expenses} savings={savings} goals={goals} budgets={budgets} />} />
+        <Route index element={<Dashboard incomes={filteredIncomes} expenses={filteredExpenses} savings={filteredSavings} goals={goals} budgets={filteredBudgets} />} />
         <Route path="transactions" element={
           <>
-            <SummaryBar incomes={incomes} expenses={expenses} savings={savings} />
-            <h1>Gestion de l'Argent</h1>
-            <ExportButtons incomes={incomes} expenses={expenses} />
-            <button onClick={resetData} className="app-reset-button">Remettre à zéro toutes les données</button>
-            <div className="app-form-container">
-              <IncomeForm onAddIncome={addIncome} />
-              <ExpenseForm onAddExpense={addExpense} />
-            </div>
-            <div className="app-form-container">
-              <IncomeTable incomes={incomes} onDeleteIncome={deleteIncome} onEditIncome={editIncome} />
-              <div className="app-card">
-                <ExpenseTable expenses={expenses} credits={credits} onDeleteExpense={deleteExpense} onEditExpense={editExpense} />
+            <SummaryBar incomes={filteredIncomes} expenses={filteredExpenses} savings={filteredSavings} />
+            <AppSection title="Gestion de l'Argent" icon="💼" color="green" actions={<ExportButtons incomes={filteredIncomes} expenses={filteredExpenses} />}>
+              <div className="app-form-container" style={{display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'space-between'}}>
+                <div style={{flex: 1, minWidth: 320, maxWidth: 420}}>
+                  <IncomeForm onAddIncome={addIncome} />
+                </div>
+                <div style={{flex: 1, minWidth: 320, maxWidth: 420}}>
+                  <ExpenseForm onAddExpense={addExpense} />
+                </div>
               </div>
-            </div>
-            <BalanceChart incomes={incomes} expenses={expenses} />
+              <button onClick={resetData} className="app-reset-button" style={{margin: '24px 0 0 0', float: 'right'}}>Remettre à zéro toutes les données</button>
+            </AppSection>
+            <AppSection title="Revenus et Dépenses" icon="📊" color="pink">
+              <div className="app-tables-flex">
+                <div className="app-table-block app-table-income">
+                  <h3 style={{marginBottom: 12}}><span role="img" aria-label="income">💰</span> Revenus</h3>
+                  <IncomeTable incomes={filteredIncomes} onDeleteIncome={deleteIncome} onEditIncome={editIncome} />
+                </div>
+                <div className="app-table-block app-table-expense">
+                  <h3 style={{marginBottom: 12}}><span role="img" aria-label="expense">🛒</span> Dépenses</h3>
+                  <ExpenseTable expenses={filteredExpenses} credits={filteredCredits} onDeleteExpense={deleteExpense} onEditExpense={editExpense} />
+                </div>
+              </div>
+            </AppSection>
+            <AppSection title="Évolution du Solde" icon="📈" color="blue">
+              <BalanceChart incomes={filteredIncomes} expenses={filteredExpenses} />
+            </AppSection>
           </>
         } />
         <Route path="epargnes" element={
           <>
-            <SummaryBar incomes={incomes} expenses={expenses} savings={savings} />
-            <h1>Mes Épargnes</h1>
-            <div className="app-form-container">
-              <SavingsForm onAddSavings={addSavings} />
-              <SavingsTable 
-                savings={savings} 
-                onDeleteSavings={deleteSavings}
-                onAddToSavings={addToSavings}
-                onWithdrawSavings={withdrawSavings}
-                onEditSavings={editSavings}
-              />
-            </div>
+            <SummaryBar incomes={filteredIncomes} expenses={filteredExpenses} savings={filteredSavings} />
+            <AppSection title="Mes Épargnes" icon="💙" color="blue">
+              <div className="app-form-container">
+                <SavingsForm onAddSavings={addSavings} />
+                <SavingsTable 
+                  savings={filteredSavings} 
+                  onDeleteSavings={deleteSavings}
+                  onAddToSavings={addToSavings}
+                  onWithdrawSavings={withdrawSavings}
+                  onEditSavings={editSavings}
+                />
+              </div>
+            </AppSection>
           </>
         } />
         <Route path="credits" element={
           <>
-            <SummaryBar incomes={incomes} expenses={expenses} savings={savings} />
-            <h1>Mes Crédits</h1>
-            <div className="app-form-container">
-              <CreditForm onAddCredit={addCredit} />
-              <CreditTable 
-                credits={credits} 
-                onDeleteCredit={deleteCredit}
-                onEditCredit={editCredit}
-                onUpdateCreditBalance={updateCreditBalance}
-              />
-            </div>
+            <SummaryBar incomes={filteredIncomes} expenses={filteredExpenses} savings={filteredSavings} />
+            <AppSection title="Mes Crédits" icon="💳" color="pink">
+              <div className="app-form-container">
+                <CreditForm onAddCredit={addCredit} />
+                <CreditTable 
+                  credits={filteredCredits} 
+                  onDeleteCredit={deleteCredit}
+                  onEditCredit={editCredit}
+                  onUpdateCreditBalance={updateCreditBalance}
+                />
+              </div>
+            </AppSection>
           </>
         } />
         <Route path="rapports" element={
           <>
-            <SummaryBar incomes={incomes} expenses={expenses} savings={savings} />
-            <h1>Rapports Mensuels</h1>
-            <MonthlyReport incomes={incomes} expenses={expenses} />
+            <SummaryBar incomes={filteredIncomes} expenses={filteredExpenses} savings={filteredSavings} />
+            <AppSection title="Rapports Mensuels" icon="📅" color="yellow">
+              <MonthlyReport incomes={filteredIncomes} expenses={filteredExpenses} />
+            </AppSection>
           </>
         } />
         <Route path="objectifs" element={
           <>
-            <h1>Mes Objectifs Financiers</h1>
-            <div className="app-form-container">
-              <GoalForm onGoalAdded={(goal) => setGoals([...goals, goal])} />
-            </div>
-            <GoalTable 
-              goals={goals} 
-              onGoalDeleted={(id) => setGoals(goals.filter(g => g._id !== id))}
-              onGoalUpdated={(updated) => setGoals(goals.map(g => g._id === updated._id ? updated : g))}
-            />
+            <AppSection title="Mes Objectifs Financiers" icon="🎯" color="green">
+              <div className="app-form-container">
+                <GoalForm onGoalAdded={(goal) => setGoals([...goals, goal])} />
+              </div>
+              <GoalTable 
+                goals={goals} 
+                onGoalDeleted={(id) => setGoals(goals.filter(g => g._id !== id))}
+                onGoalUpdated={(updated) => setGoals(goals.map(g => g._id === updated._id ? updated : g))}
+              />
+            </AppSection>
           </>
         } />
         <Route path="budgets" element={
           <>
-            <h1>Mes Budgets</h1>
-            <div className="app-form-container">
-              <BudgetForm onBudgetAdded={(budget) => setBudgets([...budgets, budget])} />
-            </div>
-            <BudgetTable 
-              budgets={budgets} 
-              onBudgetDeleted={(id) => setBudgets(budgets.filter(b => b._id !== id))}
-              onBudgetUpdated={(updated) => setBudgets(budgets.map(b => b._id === updated._id ? updated : b))}
-            />
+            <AppSection title="Mes Budgets" icon="🗂️" color="blue">
+              <div className="app-form-container">
+                <BudgetForm onBudgetAdded={(budget) => setBudgets([...budgets, budget])} />
+              </div>
+              <BudgetTable 
+                budgets={filteredBudgets} 
+                onBudgetDeleted={(id) => setBudgets(budgets.filter(b => b._id !== id))}
+                onBudgetUpdated={(updated) => setBudgets(budgets.map(b => b._id === updated._id ? updated : b))}
+              />
+            </AppSection>
           </>
         } />
         <Route path="import" element={

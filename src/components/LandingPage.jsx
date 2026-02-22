@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/LandingPage.scss';
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://api.geretonbudget.theobelland.fr/api';
 
 function LandingPage() {
   const userData = localStorage.getItem('user');
@@ -8,7 +9,7 @@ function LandingPage() {
 
   // Log visit once on mount
   useEffect(() => {
-    fetch('http://localhost:5000/api/metrics/visit', {
+    fetch(`${API_BASE}/metrics/visit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ path: '/', user: user?.email })
@@ -31,15 +32,15 @@ function LandingPage() {
         <p>Aperçu visuel des indicateurs clés avant de créer votre compte.</p>
         <div className="landing-demo-cards">
           {[{
-            label: 'Revenus mensuels', value: '7 284 €', type: 'income'
+            label: 'Revenus mensuels', value: '7 284 €', type: 'income', key: 'income'
           }, {
-            label: 'Dépenses', value: '675 €', type: 'expense'
+            label: 'Dépenses', value: '675 €', type: 'expense', key: 'expense'
           }, {
-            label: 'Épargnes', value: '0 €', type: 'savings'
+            label: 'Épargnes', value: '0 €', type: 'savings', key: 'savings'
           }, {
-            label: 'Crédits restants', value: '3', type: 'credits'
-          }].map((item, idx) => (
-            <div key={idx} className="landing-demo-card">
+            label: 'Crédits restants', value: '3', type: 'credits', key: 'credits'
+          }].map((item) => (
+            <div key={item.key} className="landing-demo-card">
               <div className="landing-demo-card-label">{item.label}</div>
               <div className={`landing-demo-card-value ${item.type}`}>{item.value}</div>
             </div>
@@ -76,19 +77,6 @@ function LandingPage() {
           </div>
         </div>
       </section>
-
-      <section className="landing-demo-image-section">
-        <h2>Démonstration</h2>
-        <p>Voici un aperçu de l'interface :</p>
-        <img src="/demo-screenshot.png" alt="Démonstration de l'app" className="landing-demo-image" />
-      </section>
-
-      <section className="landing-cta-section">
-        <h2>Commencez Maintenant</h2>
-        <p>Créez votre compte gratuitement pour accéder à votre tableau de bord personnalisé.</p>
-        <Link to="/register" className="landing-cta-button">S'inscrire</Link>
-      </section>
-
       <footer className="landing-footer">
         <p>&copy; 2026 Gestion de l'Argent. Tous droits réservés.</p>
       </footer>

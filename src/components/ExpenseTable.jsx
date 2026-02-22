@@ -132,7 +132,7 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
               const credit = credits.find(c => c.name === creditName);
               if (credit) {
                 const details = calculateCreditDetails(credit);
-                displayAmount = `${details.perPersonMonthly.toFixed(2)} €`;
+                displayAmount = `${typeof details.perPersonMonthly === 'number' ? details.perPersonMonthly.toFixed(2) : '0.00'} €`;
                 displayDate = new Date(credit.startDate).toLocaleDateString('fr-FR'); // Date de prélèvement
               }
             }
@@ -212,8 +212,8 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
               return (
                 <tr key={credit._id || index}>
                   <td>{credit.name}</td>
-                  <td>{details.monthlyPayment.toFixed(2)} €</td>
-                  <td className="expense-table-amount fixed">{details.perPersonMonthly.toFixed(2)} €</td>
+                  <td>{typeof details.monthlyPayment === 'number' ? details.monthlyPayment.toFixed(2) : '0.00'} €</td>
+                  <td className="expense-table-amount fixed">{typeof details.perPersonMonthly === 'number' ? details.perPersonMonthly.toFixed(2) : '0.00'} €</td>
                   <td>{details.monthsRemaining}</td>
                   <td>{new Date(credit.startDate).toLocaleDateString('fr-FR')}</td>
                 </tr>
@@ -221,7 +221,7 @@ function ExpenseTable({ expenses, credits, onDeleteExpense, onEditExpense }) {
             })}
           </tbody>
         </table>
-        <p><strong>Total Mensualités Crédits (parts par personne) :</strong> {totalCreditMonthly.toFixed(2)} €</p>
+        <p><strong>Total Mensualités Crédits (parts par personne) :</strong> {typeof totalCreditMonthly === 'number' ? totalCreditMonthly.toFixed(2) : '0.00'} €</p>
       </div>
     );
   };

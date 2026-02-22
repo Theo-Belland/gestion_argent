@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../styles/budgets.scss';
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://api.geretonbudget.theobelland.fr/api';
 
-const API_BASE = 'http://localhost:5000/api';
 
 function BudgetTable({ budgets, onBudgetDeleted, onBudgetUpdated }) {
   const [editId, setEditId] = useState(null);
@@ -118,13 +118,13 @@ function BudgetTable({ budgets, onBudgetDeleted, onBudgetUpdated }) {
                   <div className="budget-amounts">
                     <div className="spent-amount">
                       <span className="label">Dépensé</span>
-                      <span className={`value ${budget.isExceeded ? 'status-danger' : (budget.isNearLimit ? 'status-warning' : 'status-ok')}`}>
-                        {budget.spent?.toFixed(2) || '0.00'}€
+                      <span className={`value ${budget.isExceeded ? 'status-danger' : (budget.isNearLimit ? 'status-warning' : 'status-ok')}`}> 
+                        {typeof budget.spent === 'number' ? budget.spent.toFixed(2) : '0.00'}€
                       </span>
                     </div>
                     <div className="max-amount">
                       <span className="label">Budget</span>
-                      <span className="value">{budget.maxAmount}€</span>
+                      <span className="value">{typeof budget.maxAmount === 'number' ? budget.maxAmount.toFixed(2) : '0.00'}€</span>
                     </div>
                   </div>
 
@@ -138,7 +138,7 @@ function BudgetTable({ budgets, onBudgetDeleted, onBudgetUpdated }) {
                   </div>
 
                   <div className="budget-remaining">
-                    Reste: <strong>{Math.max(0, budget.maxAmount - (budget.spent || 0)).toFixed(2)}€</strong>
+                    Reste: <strong>{(typeof budget.maxAmount === 'number' && typeof budget.spent === 'number') ? Math.max(0, budget.maxAmount - budget.spent).toFixed(2) : '0.00'}€</strong>
                   </div>
 
                   <div className="budget-period">

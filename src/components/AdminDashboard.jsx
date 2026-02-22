@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/AdminDashboard.scss';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://api.geretonbudget.theobelland.fr/api';
+
 
 function AdminDashboard() {
   const [users, setUsers] = useState([]);
@@ -105,7 +106,7 @@ function AdminDashboard() {
     }
     try {
       const token = localStorage.getItem('token');
-      await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+      await fetch(`${API_BASE}/admin/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -205,46 +206,49 @@ function AdminDashboard() {
       </div>
 
       {activeTab === 'stats' && (
-      <div className="admin-content">
-        <div className="admin-section">
-          <h2>Statistiques Globales</h2>
-          <p>Utilisateurs: {stats.users}</p>
-          <p>Visites: {stats.visits ?? '—'}</p>
-        </div>
-
-        <div className="admin-section admin-section-wide">
-          <h2>Utilisateurs</h2>
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Email</th>
-                <th>Rôle</th>
-                <th>Date d'inscription</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(user => (
-                <tr key={user._id}>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>{new Date(user.createdAt).toLocaleDateString('fr-FR')}</td>
-                  <td>
-                    {user.role !== 'admin' && (
-                      <button onClick={() => promoteToAdmin(user._id)} className="admin-promote-btn">
-                        Promouvoir Admin
-                      </button>
-                    )}
-                    <button onClick={() => deleteUser(user._id)} className="admin-delete-btn">
-                      Supprimer
-                    </button>
-                  </td>
+        <div className="admin-content">
+          <div className="admin-section">
+            <h2>Statistiques Globales</h2>
+            <p>Utilisateurs: {stats.users}</p>
+            <p>Visites: {stats.visits ?? '—'}</p>
+          </div>
+          <div className="admin-section">
+            <h2>Notifications</h2>
+            <p>Aucune nouvelle notification.</p>
+          </div>
+          <div className="admin-section admin-section-wide">
+            <h2>Utilisateurs</h2>
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Rôle</th>
+                  <th>Date d'inscription</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.map(user => (
+                  <tr key={user._id}>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                    <td>{new Date(user.createdAt).toLocaleDateString('fr-FR')}</td>
+                    <td>
+                      {user.role !== 'admin' && (
+                        <button onClick={() => promoteToAdmin(user._id)} className="admin-promote-btn">
+                          Promouvoir Admin
+                        </button>
+                      )}
+                      <button onClick={() => deleteUser(user._id)} className="admin-delete-btn">
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
       )}
 
       {activeTab === 'blog' && (

@@ -8,6 +8,7 @@ function CreditForm({ onAddCredit }) {
   const [durationMonths, setDurationMonths] = useState('');
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
   const [currentBalance, setCurrentBalance] = useState('');
+  const [isSolo, setIsSolo] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,6 +25,7 @@ function CreditForm({ onAddCredit }) {
       durationMonths: parseInt(durationMonths),
       startDate: startDate,
       balance: currentBalance ? parseFloat(currentBalance) : parseFloat(amount),
+      isSolo: isSolo
     };
 
     onAddCredit(newCredit);
@@ -35,6 +37,7 @@ function CreditForm({ onAddCredit }) {
     setDurationMonths('');
     setStartDate(new Date().toISOString().split('T')[0]);
     setCurrentBalance('');
+    setIsSolo(false);
   };
 
   return (
@@ -118,6 +121,17 @@ function CreditForm({ onAddCredit }) {
           />
         </div>
 
+        <div className="credit-form-group">
+          <label className="credit-form-group label">
+            <input
+              type="checkbox"
+              checked={isSolo}
+              onChange={e => setIsSolo(e.target.checked)}
+              className="credit-form-checkbox"
+            />
+            Crédit pris seul (pas à deux)
+          </label>
+        </div>
         <button type="submit" className="credit-form-submit">
           Ajouter le Crédit
         </button>

@@ -15,6 +15,11 @@ router.get('/', auth, async (req, res) => {
 
 // POST a new savings
 router.post('/', auth, async (req, res) => {
+  // Log détaillé du corps reçu avec typage
+  console.log('POST /api/savings body:', req.body);
+  Object.entries(req.body).forEach(([key, value]) => {
+    console.log(`  ${key}:`, value, '| type:', typeof value);
+  });
   const savings = new Savings({
     ...req.body,
     userId: req.user.userId
@@ -23,7 +28,8 @@ router.post('/', auth, async (req, res) => {
     const newSavings = await savings.save();
     res.status(201).json(newSavings);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    console.error('Erreur création épargne:', err);
+    res.status(400).json({ message: err.message, stack: err.stack });
   }
 });
 

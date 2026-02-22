@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Navbar.scss';
 
@@ -7,6 +7,7 @@ function Navbar() {
   const user = userData ? JSON.parse(userData) : null;
   const navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState(null);
+  const dropdownRefs = useRef([]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -64,6 +65,23 @@ function Navbar() {
     }
   ];
 
+  // Fermer le dropdown si clic en dehors
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        openDropdown !== null &&
+        dropdownRefs.current[openDropdown] &&
+        !dropdownRefs.current[openDropdown].contains(event.target)
+      ) {
+        setOpenDropdown(null);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openDropdown]);
+
   return (
     <nav className="navbar-general">
       <Link to="/" className="navbar-logo">Gestion Argent</Link>
@@ -72,8 +90,7 @@ function Navbar() {
           <div
             className={"navbar-multi-dropdown-wrapper" + (openDropdown === idx ? " open" : "")}
             key={dropdown.label}
-            onMouseEnter={() => setOpenDropdown(idx)}
-            onMouseLeave={() => setOpenDropdown(null)}
+            ref={el => dropdownRefs.current[idx] = el}
           >
             <button className="navbar-multi-dropdown-toggle" onClick={() => setOpenDropdown(openDropdown === idx ? null : idx)}>
               {dropdown.label} <span className="navbar-dropdown-arrow">▼</span>

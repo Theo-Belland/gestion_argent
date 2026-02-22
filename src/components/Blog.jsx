@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import '../styles/Blog.scss';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://api.geretonbudget.theobelland.fr/api';
+
 
 function Blog() {
   const [posts, setPosts] = useState([]);

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import '../styles/goals.scss';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://api.geretonbudget.theobelland.fr/api';
+
 
 function GoalTable({ goals, onGoalDeleted, onGoalUpdated }) {
   const [editId, setEditId] = useState(null);

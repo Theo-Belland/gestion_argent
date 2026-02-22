@@ -8,25 +8,18 @@ console.log('PORT:', process.env.PORT);
 
 const app = express();
 
-// Middleware
-const allowedOrigins = [
-  process.env.CLIENT_URL || 'http://localhost:5173',
-  'http://127.0.0.1:5173',
-  'http://localhost:4173',
-  'http://127.0.0.1:4173',
-  'http://localhost:5174',
-  'http://127.0.0.1:5174'
-];
 
-const corsOptions = {
-  origin: allowedOrigins,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-};
+// Middleware CORS (autorise explicitement le domaine frontend et localhost)
+app.use(cors({
+  origin: [
+    'https://geretonbudget.theobelland.fr',
+    'http://localhost:5173'
+  ],
+  credentials: true,
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
+}));
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
 app.use(express.json());
 
 // Connect to MongoDB
@@ -44,11 +37,12 @@ app.use('/api/credits', require('./routes/credits'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/metrics', require('./routes/metrics'));
 app.use('/api/blog', require('./routes/blog'));
+
 app.use('/api/goals', require('./routes/goals'));
 app.use('/api/budgets', require('./routes/budgets'));
-app.use('/api/password-reset', require('./routes/passwordReset'));
+app.use('/api/notifications', require('./routes/notifications'));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
